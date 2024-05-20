@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <title>
+        KxReport 2.0
+    </title>
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 400px;
+            height: 300px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="center">
+        <form action="openPDF" method="post" target="report" 
+        onsubmit="window.open('about:blank','report','width=1000,height=1000');">
+            <table>
+                <tr>
+                    <td><label for="report"><strong>Report</strong></label></td>
+                    <td><input type="text" placeholder="Enter Report File Name [.jasper]" name="report" value="00-000"
+                            required></td>
+                </tr>
+                <tr>
+                    <td><label for="db"><strong>Database</strong></label></td>
+                    <td><input type="text" placeholder="Enter Database Name" name="db" value="kxtest" required></td>
+                </tr>
+                <tr>
+                    <td><label for="comCode"><strong>Company Code</strong></label></td>
+                    <td><input type="number" placeholder="Enter Company Code" name="comCode" value="1"></td>
+                </tr>
+                <tr>
+                    <td><label for="comName"><strong>Company Name</strong></label></td>
+                    <td><input type="text" placeholder="Enter Company Name" name="comName" value="Company Name"></td>
+                </tr>
+                <tr>
+                    <td><label for="fromDate"><strong>From Date</strong></label></td>
+                    <td><input type="date" placeholder="Enter Date From" name="fromDate" value="2020-01-01"></td>
+                </tr>
+                <tr>
+                    <td><label for="toDate"><strong>To Date</strong></label></td>
+                    <td><input type="date" placeholder="Enter Date To" name="toDate" value="2020-12-31"></td>
+                </tr>
+                <tr>
+                    <td><label for="fromId"><strong>From ID</strong></label></td>
+                    <td><input type="text" placeholder="Enter ID From" name="fromId" value="000000"></td>
+                </tr>
+                <tr>
+                    <td><label for="toId"><strong>To ID</strong></label></td>
+                    <td><input type="text" placeholder="Enter ID To" name="toId" value="999999"></td>
+                </tr>
+            </table>
+            <br>
+            <button type="submit">Call Report</button>
+        </form>
+    </div>
+</body>
+
+</html>
