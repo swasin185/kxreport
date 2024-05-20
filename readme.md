@@ -1,3 +1,10 @@
+## build command line
+```:sh
+mvn package
+sudo cp ./target/*.war /var/lib/tomcat10/webapps
+sudo cp ./target/jasper/*.jasper /khgroup/report
+```
+
 ## kxserv express && tomcat must run in https ssl mode
 ## create .keystore in home user dir
 ```:sh
@@ -12,13 +19,17 @@ keytool -genkey -alias tomcat -keyalg RSA
     protocol="org.apache.coyote.http11.Http11NioProtocol" scheme="https"
     secure="true" sslProtocol="TLS" />
 ```
-## modify web.xml comment
 
-Jasper Report Folder
-/ - [khgroup]
-    |-[report]
-      |-[database]
-        |- *.jasper
-    |-[report-app]
-      |-[database]
-        |- *.jasper
+## Jasper Report Folder
+```
+[khgroup]
+|-[report]
+| |-[database]
+| | |-- *.jasper
+| |-- *.jasper
+|-[report-app]
+| |-[database]
+| | |-- *.jasper
+| |-- *.jasper
+
+```
