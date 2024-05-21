@@ -230,9 +230,10 @@ public class ReportController {
 		this.logClient(request, params);
 		String sessId = Integer.toString(session.getId().hashCode(), 16).toUpperCase();
 		String outputFile = null;
+		System.out.println("xx" + (String) params.get("report"));
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
-			outputFile = params.get("report") + sessId + ".pdf";
+			outputFile = (String) params.get("report") + sessId + ".pdf";
 			JasperExportManager.exportReportToPdfStream(jasperPrint,
 					new FileOutputStream(Database.OUTPUT_PATH + outputFile));
 		} catch (Exception e) {
