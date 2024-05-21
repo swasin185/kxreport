@@ -42,7 +42,7 @@ public class ReportController {
 
 	private Database db;
 	private SimpleCsvExporterConfiguration config;
-	
+
 	public ReportController() {
 		try {
 			db = new Database();
@@ -54,13 +54,23 @@ public class ReportController {
 		}
 	}
 
-	private JasperPrint loadJasperFile(Map<String, Object> params) throws Exception {
+	private JasperPrint loadJasperFile(Map<String, Object> params) {
+		JasperPrint report = null;
 		Connection conn = db.getConnection((String) params.get("db"));
-		this.createTempIdList(conn, (String) params.get("idList"));
-		JasperPrint p = JasperFillManager
-				.fillReport((JasperReport) JRLoader.loadObjectFromFile(getJasperFile(params)), params, conn);
-		conn.close();
-		return p;
+		try {
+			this.createTempIdList(conn, (String) params.get("idList"));
+			report = JasperFillManager
+					.fillReport((JasperReport) JRLoader.loadObjectFromFile(getJasperFile(params)), params, conn);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return report;
 	}
 
 	private String getJasperFile(Map<String, Object> params) {
@@ -178,9 +188,9 @@ public class ReportController {
 	}
 
 	private void createTempIdList(Connection conn, String idList) throws SQLException {
-		if (idList != null) {
+		if (idList != null && idList.indexOf(" ") > 0) {
 			Statement stmt = conn.createStatement();
-			stmt.execute("drop temporary table if exists idlist");
+			stmt.execute("drop report temporary table if exists idlist");
 			stmt.execute("create temporary table idlist(id varchar(50))");
 			stmt.execute("insert into idlist values " + idList);
 		}
@@ -210,23 +220,19 @@ public class ReportController {
 		if (responseBody == null)
 			return ResponseEntity.notFound().build();
 		else
-			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.csv")
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + params.get("report") + ".csv")
 					.contentType(MediaType.TEXT_PLAIN).body(responseBody);
 	}
 
-	// @PostMapping(path = "/filePDF", produces = "text/plain")
-	@PostMapping("/filePDF") // need RestController
+	@PostMapping("/filePDF")
 	public String filePDF(HttpServletRequest request, HttpSession session, @RequestParam Map<String, Object> params) {
 		this.logClient(request, params);
-		String jasperFile = getJasperFile(params);
 		String sessId = Integer.toString(session.getId().hashCode(), 16).toUpperCase();
-		String outputFile = jasperFile;
-		File dir = new File(Database.OUTPUT_PATH + sessId);
-		if (!dir.exists())
-			dir.mkdirs();
+		String outputFile = null;
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
-			outputFile = sessId + Integer.toString(jasperPrint.hashCode(), 16) + ".pdf";
+			outputFile = params.get("report") + sessId + ".pdf";
 			JasperExportManager.exportReportToPdfStream(jasperPrint,
 					new FileOutputStream(Database.OUTPUT_PATH + outputFile));
 		} catch (Exception e) {

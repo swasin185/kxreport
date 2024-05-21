@@ -1,65 +1,78 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <title>
-        KxReport 2.0
-    </title>
-    <style>
-        .center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 400px;
-            height: 300px;
-            border: 1px solid black;
-        }
-    </style>
-</head>
-
-<body>
+<html lang="th">
+  <body bgcolor="black">
+    <img src="khlogo-xs.png" alt="logo"/> 
+    <br />
     <div class="center">
-        <form action="openPDF" method="post" target="report" 
-        onsubmit="window.open('about:blank','report','width=1000,height=1000');">
-            <table>
-                <tr>
-                    <td><label for="report"><strong>Report</strong></label></td>
-                    <td><input type="text" placeholder="Enter Report File Name [.jasper]" name="report" value="00-000"
-                            required></td>
-                </tr>
-                <tr>
-                    <td><label for="db"><strong>Database</strong></label></td>
-                    <td><input type="text" placeholder="Enter Database Name" name="db" value="kxtest" required></td>
-                </tr>
-                <tr>
-                    <td><label for="comCode"><strong>Company Code</strong></label></td>
-                    <td><input type="number" placeholder="Enter Company Code" name="comCode" value="1"></td>
-                </tr>
-                <tr>
-                    <td><label for="comName"><strong>Company Name</strong></label></td>
-                    <td><input type="text" placeholder="Enter Company Name" name="comName" value="Company Name"></td>
-                </tr>
-                <tr>
-                    <td><label for="fromDate"><strong>From Date</strong></label></td>
-                    <td><input type="date" placeholder="Enter Date From" name="fromDate" value="2020-01-01"></td>
-                </tr>
-                <tr>
-                    <td><label for="toDate"><strong>To Date</strong></label></td>
-                    <td><input type="date" placeholder="Enter Date To" name="toDate" value="2020-12-31"></td>
-                </tr>
-                <tr>
-                    <td><label for="fromId"><strong>From ID</strong></label></td>
-                    <td><input type="text" placeholder="Enter ID From" name="fromId" value="000000"></td>
-                </tr>
-                <tr>
-                    <td><label for="toId"><strong>To ID</strong></label></td>
-                    <td><input type="text" placeholder="Enter ID To" name="toId" value="999999"></td>
-                </tr>
-            </table>
-            <br>
-            <button type="submit">Call Report</button>
-        </form>
+      <form
+        action="openPDF"
+        method="post"
+        target="report"
+        onsubmit="window.open('about:blank','report','width=1000,height=1000');"
+      >
+        <table>
+          <tr>
+            <td><label for="report">Report</label></td>
+            <td><input type="text" name="report" value="00-000" required/></td>
+          </tr>
+          <tr>
+            <td><label for="db">Database</label></td>
+            <td><input type="text" name="db" value="kxtest" required/></td>
+          </tr>
+          <tr>
+            <td><label for="comCode">Company Code</label></td>
+            <td><input type="number" name="comCode" value="1"/></td>
+          </tr>
+          <tr>
+            <td><label for="comName">Company Name</label></td>
+            <td><input type="text" name="comName" value="Company Name"/></td>
+          </tr>
+          <tr>
+            <td><label for="fromDate">From Date</label></td>
+            <td><input type="date" name="fromDate"/></td>
+          </tr>
+          <tr>
+            <td><label for="toDate">To Date</label></td>
+            <td><input type="date" name="toDate"/></td>
+          </tr>
+          <tr>
+            <td><label for="fromId">From ID</label></td>
+            <td><input type="text" name="fromId" value="000000"/></td>
+          </tr>
+          <tr>
+            <td><label for="toId">To ID</label></td>
+            <td><input type="text" name="toId" value="999999"/></td>
+          </tr>
+          <tr>
+            <td><label for="option">Option</label></td>
+            <td><input type="number" name="option" value="0"/></td>
+          </tr>
+          <tr>
+            <td><label for="idList">ID List</label></td>
+            <td><input type="text" name="idList" value=""/></td>
+          </tr>
+        </table>
+        <hr/>
+        <button type="submit">Call Report</button>
+      </form>
     </div>
-</body>
+  </body>
 
+  <script lang="js">
+    let today = new Date().toISOString().split('T')[0];
+    document.getElementsByName('toDate')[0].value = today;
+    document.getElementsByName('fromDate')[0].value = today.substring(0, 4) + '-01-01';
+  </script>
+
+  <style>
+    .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 400px;
+      height: 320px;
+      border: 1px solid black;
+      background-color: lightgrey;
+    }
+  </style>
 </html>

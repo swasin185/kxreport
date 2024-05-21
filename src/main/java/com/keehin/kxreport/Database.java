@@ -20,8 +20,7 @@ public class Database {
     public static String USER = "kxreport";
     public static String PWD = "kxreport";
     public static final Properties prop = new Properties();
-    //@Autowired
-    //static  AppConfig app;
+
     static {
         try (FileReader input = new FileReader("webapps/kxreport/WEB-INF/classes/application.properties")) {
             prop.load(input);
@@ -37,8 +36,6 @@ public class Database {
 
     public static final SimpleDateFormat DTFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
 
-    // private HashMap<String, Connection> connectMap = new HashMap<String,
-    // Connection>();
     private HashMap<String, DataSource> pools = new HashMap<String, DataSource>();
 
     public Database() throws SQLException {
@@ -49,22 +46,10 @@ public class Database {
         Connection conn = null;
         if (db == null)
             db = "kxtest";
-
-        // String key = db + sessID;
-        // if (connectMap.get(key) == null) {
-        // try {
-        // connectMap.put(key, DriverManager.getConnection(JDBC_URI + db, USER, PWD));
-        // System.out.println("create connection : " + key);
-        // } catch (SQLException e) {
-        // e.printStackTrace();
-        // }
-        // }
-        // conn = connectMap.get(key);
-
-        if (pools.get(db) == null)
-            pools.put(db, new MariaDbPoolDataSource(JDBC_URI + db + "?user=" + USER + "&password=" + PWD
-                    + "&staticGlobal&minPoolSize=0&maxPoolSize=32&maxIdleTime=900&registerJmxPool=false"));
         try {
+            if (pools.get(db) == null)
+                pools.put(db, new MariaDbPoolDataSource(JDBC_URI + db + "?user=" + USER + "&password=" + PWD
+                        + "&staticGlobal&minPoolSize=0&maxPoolSize=32&maxIdleTime=900&registerJmxPool=false"));
             conn = pools.get(db).getConnection();
         } catch (SQLException e) {
             e.printStackTrace();

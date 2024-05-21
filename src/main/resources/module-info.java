@@ -1,9 +1,2 @@
-/**
- * 
- */
-/**
- * @author tom
- *
- */
 module kxreport {
 }

@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<!--
-		1 tomcat9 have library kxreport *.jar
-		2 permission chmod -R 755 /khgroup/report
-	-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.5</version>
+		<version>3.2.5</version> 
 		<relativePath />
 	</parent>
-
 	<groupId>com.keehin</groupId>
 	<artifactId>kxreport</artifactId>
 	<version>2.0</version>
@@ -36,7 +32,7 @@
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
-			<version>2.7.12</version>
+			<version>3.4.0</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.neuro4j/jasper-report-web-plugin -->
 		<dependency>
@@ -45,7 +41,6 @@
 			<version>6.21.3</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<finalName>${project.name}</finalName>
 		<plugins>
@@ -54,10 +49,10 @@
 				<configuration>
 					<!-- <webResources>
             			<resource>
-					      	<directory>public</directory>
+					      	<directory>output</directory>
             			</resource>
-          			</webResources> -->
-					<!-- packagingExcludes>WEB-INF/lib/*.jar<packagingExcludes --> 
+          			</webResources>  -->
+					<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> 
 				</configuration>
 			</plugin>
 			<plugin>

@@ -33,3 +33,14 @@ keytool -genkey -alias tomcat -keyalg RSA
 | |-- *.jasper
 
 ```
+
+## MariaDB user
+```:sh
+sudo mysql
+```
+```:sql
+drop user if exists 'kxreport'@'localhost';
+create user 'kxreport'@'localhost' identified by 'kxreport';
+grant select, execute, create temporary tables on *.* to 'kxreport'@'localhost';
+create database kxtest;
+```
