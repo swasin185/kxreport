@@ -93,7 +93,8 @@ public class ReportController {
 	}
 
 	private void logClient(HttpServletRequest req, Map<String, Object> params) {
-		System.out.println(req.getRemoteAddr() + "," + (String) params.get("db") + "," + (String) params.get("report"));
+		System.out.println(req.getRemoteAddr() + "_" + req.getMethod() + '_' + (String) params.get("db") + "_"
+				+ (String) params.get("report"));
 	}
 
 	private Map<String, Object> mapParams(Parameter params) {
@@ -228,16 +229,15 @@ public class ReportController {
 	@PostMapping("/filePDF")
 	public String filePDF(HttpServletRequest request, HttpSession session, @RequestParam Map<String, Object> params) {
 		this.logClient(request, params);
-		String sessId = Integer.toString(session.getId().hashCode(), 16).toUpperCase();
 		String outputFile = null;
-		System.out.println("xx" + (String) params.get("report"));
+		String sessId = SessListener.createHashCode(session);
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
-			outputFile = (String) params.get("report") + sessId + ".pdf";
+			outputFile = sessId + "/" + (String) params.get("report") + ".pdf";
 			JasperExportManager.exportReportToPdfStream(jasperPrint,
 					new FileOutputStream(Database.OUTPUT_PATH + outputFile));
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 		return outputFile;
 	}
