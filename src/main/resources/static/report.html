@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTFem-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KxReport</title>
+    <style scoped>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: black;
+      }
+      .timer {
+        font-size: 5em;
+        color: lawngreen;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="timer" id="timer"></div>
+    <form id="form" name="form" action="openPDF" method="post" target="_self">
+      <input type="hidden" id="report" name="report" />
+      <input type="hidden" id="db" name="db" />
+      <input type="hidden" id="comCode" name="comCode" />
+      <input type="hidden" id="comName" name="comName" />
+      <input type="hidden" id="fromDate" name="fromDate" />
+      <input type="hidden" id="toDate" name="toDate" />
+      <input type="hidden" id="fromId" name="fromId" />
+      <input type="hidden" id="toId" name="toId" />
+      <input type="hidden" id="option" name="option" />
+      <input type="hidden" id="idList" name="idList" />
+    </form>
+  </body>
+  <script lang="js">
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.get('report') > '') {
+      document.getElementById('report').value = urlParams.get('report')
+      document.getElementById('db').value = urlParams.get('db')
+      document.getElementById('comCode').value = urlParams.get('comCode')
+      document.getElementById('comName').value = urlParams.get('comName')
+      document.getElementById('fromDate').value = urlParams.get('fromDate')
+      document.getElementById('toDate').value = urlParams.get('toDate')
+      document.getElementById('fromId').value = urlParams.get('fromId')
+      document.getElementById('toId').value = urlParams.get('toId')
+      document.getElementById('option').value = urlParams.get('option')
+      document.getElementById('idList').value = urlParams.get('idList')
+      document.getElementById("form").submit()
+    }
+    var mm = 0
+    var ss = 0
+    const timer = document.getElementById('timer')
+    updateTime()
+    setInterval(updateTime, 1000)
+    function updateTime() {
+      timer.textContent = (mm > 9 ? mm : '0' + mm) + ':' + (ss > 9 ? ss : '0' + ss)
+      ss++
+      mm = (mm + Math.floor(ss / 60)) 
+      ss %= 60  
+    }
+  </script>
+</html>

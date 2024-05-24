@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpSessionListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SessListener implements HttpSessionListener {
+public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());

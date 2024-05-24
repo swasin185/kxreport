@@ -65,7 +65,7 @@ order by table_type, table_name]]>
 					</reportElement>
 					<box leftPadding="5" rightPadding="5"/>
 					<textElement>
-						<font fontName="TH SarabunPSK" size="14" isUnderline="true"/>
+						<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{table_type}]]></textFieldExpression>
 				</textField>
@@ -192,7 +192,7 @@ order by table_type, table_name]]>
 				<textFieldExpression><![CDATA[$P{option}]]></textFieldExpression>
 			</textField>
 			<textField pattern="d/MM/yy HH:mm:ss " isBlankWhenNull="true">
-				<reportElement x="32" y="0" width="70" height="14" uuid="dc543968-34bf-40d6-ac94-6843c2c3bec8">
+				<reportElement x="0" y="12" width="70" height="14" uuid="dc543968-34bf-40d6-ac94-6843c2c3bec8">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -232,7 +232,7 @@ order by table_type, table_name]]>
 				<textElement textAlignment="Left">
 					<font fontName="TH SarabunPSK" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[" / " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" / " + $V{PAGE_COUNT}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="40" width="60" height="20" uuid="e92f0a4f-324a-47c7-a16d-63ce20748e7f">
@@ -356,7 +356,7 @@ order by table_type, table_name]]>
 				<textElement textAlignment="Left">
 					<font fontName="TH SarabunPSK" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[" / " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" / " + $V{PAGE_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -399,12 +399,4 @@ order by table_type, table_name]]>
 			</textField>
 		</band>
 	</detail>
-	<summary>
-		<band height="96">
-			<image>
-				<reportElement x="180" y="0" width="200" height="60" uuid="373b3c74-62ec-4c19-a5c2-6ef85fc77be1"/>
-				<imageExpression><![CDATA["http://localhost:8080/kxreport/khlogo-xs.png"]]></imageExpression>
-			</image>
-		</band>
-	</summary>
 </jasperReport>
