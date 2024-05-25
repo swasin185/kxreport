@@ -14,14 +14,16 @@
         background-color: black;
       }
       .timer {
-        font-size: 5em;
-        color: lawngreen;
+        font-size: 2em;
+        color: silver;
       }
     </style>
   </head>
   <body>
+    <img src="./img/tesseract.gif" />
     <div class="timer" id="timer"></div>
     <form id="form" name="form" action="openPDF" method="post" target="_self">
+      <input type="hidden" id="app" name="app" />
       <input type="hidden" id="report" name="report" />
       <input type="hidden" id="db" name="db" />
       <input type="hidden" id="comCode" name="comCode" />
@@ -37,6 +39,7 @@
   <script lang="js">
     const urlParams = new URLSearchParams(window.location.search)
     if (urlParams.get('report') > '') {
+      document.getElementById('app').value = urlParams.get('app')
       document.getElementById('report').value = urlParams.get('report')
       document.getElementById('db').value = urlParams.get('db')
       document.getElementById('comCode').value = urlParams.get('comCode')

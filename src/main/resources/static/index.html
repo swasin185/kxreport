@@ -25,6 +25,7 @@
         method="post"
         target="report"
         onsubmit="openWin()"
+        style="border: 1px solid grey; padding: 10px"
       >
         <table>
           <tr>
@@ -90,7 +91,6 @@
           </tr>
         </table>
         <button type="submit">Call Report</button>
-        <hr />
       </form>
       <button onclick="callFilePDF()">Call FilePDF</button>
       <button onclick="callFileCSV()">Export CSV</button>
@@ -102,8 +102,9 @@
     document.getElementById('toDate').value = today
     document.getElementById('fromDate').value = today.substring(0, 4) + '-01-01'
 
-    async function callPostAPI(service) {
+    async function createURL(service) {
       var url = new URL(service, window.location.href)
+      url.searchParams.append('app', '')
       url.searchParams.append('report', document.getElementById('report').value)
       url.searchParams.append('db',document.getElementById('db').value)
       url.searchParams.append('comCode', document.getElementById('comCode').value)
@@ -117,24 +118,24 @@
       return url
     }
 
-    function openWin() {
-      return window.open('report.html', 'report', 'width=1000,height=1000,toolbar=no,menubar=no')
+    function openWin(name = 'report.html') {
+      return window.open(name, 'report', 'width=1000,height=1000,toolbar=no,menubar=no')
     }
 
     async function callFilePDF() {
       const reportWindow = openWin()
-      const url = await callPostAPI('filePDF')
+      const url = await createURL('filePDF')
       const response = await fetch(url, { method: 'POST' })
       reportWindow.location.href = await response.text()
     }
 
     async function callOpenPDF() {
-      const url = await callPostAPI('report.html')
-      window.open(url.toString(), 'report', 'width=1000,height=1000,toolbar=no,menubar=no')
+      const url = await createURL('report.html')
+      openWin(url.toString())
     }
 
     async function callFileCSV() {
-      const url = await callPostAPI('fileCSV')
+      const url = await createURL('fileCSV')
       const response = await fetch(url, { method: 'POST' })
       location.href = await response.text()
     }
