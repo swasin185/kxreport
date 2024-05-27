@@ -90,7 +90,7 @@
             <td><input type="text" id="idList" name="idList" value="" /></td>
           </tr>
         </table>
-        <button type="submit">Call Report</button>
+        <button type="submit">Submit Form Report</button>
       </form>
       <button onclick="callFilePDF()">Call FilePDF</button>
       <button onclick="callFileCSV()">Export CSV</button>
@@ -101,9 +101,8 @@
     let today = new Date().toISOString().substring(0, 10)
     document.getElementById('toDate').value = today
     document.getElementById('fromDate').value = today.substring(0, 4) + '-01-01'
-
     async function createURL(service) {
-      var url = new URL(service, window.location.href)
+      let url = new URL(service, window.location.href)
       url.searchParams.append('app', '')
       url.searchParams.append('report', document.getElementById('report').value)
       url.searchParams.append('db',document.getElementById('db').value)
@@ -117,23 +116,19 @@
       url.searchParams.append('idList', document.getElementById('idList').value)
       return url
     }
-
     function openWin(name = 'report.html') {
-      return window.open(name, 'report', 'width=1000,height=1000,toolbar=no,menubar=no')
+      return window.open(name, 'report', 'width=800,height=800,toolbar=no,menubar=no')
     }
-
     async function callFilePDF() {
       const reportWindow = openWin()
       const url = await createURL('filePDF')
       const response = await fetch(url, { method: 'POST' })
       reportWindow.location.href = await response.text()
     }
-
     async function callOpenPDF() {
       const url = await createURL('report.html')
       openWin(url.toString())
     }
-
     async function callFileCSV() {
       const url = await createURL('fileCSV')
       const response = await fetch(url, { method: 'POST' })

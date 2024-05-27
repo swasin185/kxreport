@@ -31,9 +31,8 @@
 	</parameter>
 	<queryString>
 		<![CDATA[select table_type, table_name, table_comment
-from information_schema.tables, (select sleep($P{option})) delay
-where table_schema =  $P{db} and
-create_time between $P{dateFrom} and $P{dateTo}
+from information_schema.tables
+where table_schema =  $P{db}
 order by table_type, table_name]]>
 	</queryString>
 	<field name="table_type" class="java.lang.String">
@@ -232,7 +231,7 @@ order by table_type, table_name]]>
 				<textElement textAlignment="Left">
 					<font fontName="TH SarabunPSK" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[" / " + $V{PAGE_COUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" / " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="40" width="60" height="20" uuid="e92f0a4f-324a-47c7-a16d-63ce20748e7f">
@@ -356,7 +355,7 @@ order by table_type, table_name]]>
 				<textElement textAlignment="Left">
 					<font fontName="TH SarabunPSK" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[" / " + $V{PAGE_COUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" / " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

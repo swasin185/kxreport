@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="th">
   <head>
-    <meta charset="UTFem-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KxReport</title>
     <style scoped>
@@ -9,20 +9,35 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
         margin: 0;
+        padding: 0;
         background-color: black;
+        /* background-image: url("./img/sphere.gif"); */
+        /* background-position: center; This centers the image */
+        /* background-repeat: no-repeat; /* This ensures the image does not repeat */
+        height: 100vh; /* Ensures the background covers the full height of the viewport */
+        width: 100vw; /* Ensures the background covers the full width of the viewport */
       }
       .timer {
+        font-family: monospace;
+        font-weight: bold;
         font-size: 2em;
-        color: silver;
+        color: skyblue;
       }
     </style>
   </head>
   <body>
     <img src="./img/tesseract.gif" />
-    <div class="timer" id="timer"></div>
-    <form id="form" name="form" action="openPDF" method="post" target="_self">
+    <div class="timer" id="timer">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+    <form
+      id="form"
+      name="form"
+      action="openPDF"
+      method="post"
+      target="_self"
+      type="hidden"
+    >
       <input type="hidden" id="app" name="app" />
       <input type="hidden" id="report" name="report" />
       <input type="hidden" id="db" name="db" />
@@ -53,15 +68,16 @@
       document.getElementById("form").submit()
     }
     var mm = 0
-    var ss = 0
+    var ss = 1
     const timer = document.getElementById('timer')
-    updateTime()
     setInterval(updateTime, 1000)
     function updateTime() {
       timer.textContent = (mm > 9 ? mm : '0' + mm) + ':' + (ss > 9 ? ss : '0' + ss)
       ss++
-      mm = (mm + Math.floor(ss / 60)) 
-      ss %= 60  
+      if (ss == 60) {
+        mm++
+        ss = 0
+      }
     }
   </script>
 </html>

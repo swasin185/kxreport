@@ -70,6 +70,7 @@ public class ReportController {
 		}
 	}
 
+
 	private JasperPrint loadJasperFile(Map<String, Object> params) {
 		JasperPrint report = null;
 		Connection conn = db.getConnection((String) params.get("db"));
@@ -99,7 +100,7 @@ public class ReportController {
 		} else {
 			jasperFile = "A00.jasper";
 		}
-		if (params.get("app") != null)
+		if (params.get("app") != null && !params.get("app").equals(""))
 			appName = "-" + params.get("app").toString();
 		dbName = (String) params.get("db");
 		File jpFile = new File(Database.REPORT_PATH + appName + "/" + dbName + "/" + jasperFile);
@@ -152,7 +153,7 @@ public class ReportController {
 			String[] list = dir.list(ReportController.filter);
 			data = new Map[list.length];
 			int i = 0;
-			for (String fileName : list) 
+			for (String fileName : list)
 				try {
 					File file = new File(Database.REPORT_PATH + fileName);
 					JasperPrint report = JasperFillManager
@@ -219,7 +220,7 @@ public class ReportController {
 		return openPDF(request, session, this.mapParams(params));
 	}
 
-	@PostMapping(value = "/openPDF", produces = "application/pdf; charset=UTF-8")
+	@PostMapping(value = "/openPDF", produces = "text/html; charset=UTF-8")
 	public ResponseEntity<StreamingResponseBody> openPDF(HttpServletRequest request, HttpSession session,
 			@RequestParam Map<String, Object> params) {
 		this.logClient(request, params);
@@ -239,7 +240,7 @@ public class ReportController {
 		if (responseBody == null)
 			return ResponseEntity.notFound().build();
 		else
-			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "inline")
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "inline;")
 					.contentType(MediaType.APPLICATION_PDF).body(responseBody);
 	}
 
@@ -296,7 +297,8 @@ public class ReportController {
 			JasperPrint jasperPrint = loadJasperFile(params);
 			outputFile = sessId + "/" + (String) params.get("report") + ".csv";
 			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-			exporter.setExporterOutput(new SimpleWriterExporterOutput(new FileOutputStream(Database.OUTPUT_PATH + outputFile)));
+			exporter.setExporterOutput(
+					new SimpleWriterExporterOutput(new FileOutputStream(Database.OUTPUT_PATH + outputFile)));
 			exporter.setConfiguration(this.config);
 			exporter.exportReport();
 		} catch (Exception e) {
