@@ -116,8 +116,8 @@
       url.searchParams.append('idList', document.getElementById('idList').value)
       return url
     }
-    function openWin(name = 'report.html') {
-      return window.open(name, 'report', 'width=800,height=800,toolbar=no,menubar=no')
+    function openWin(htmlFile = 'report.html') {
+      return window.open(htmlFile, 'report', 'width=800,height=800,toolbar=no,menubar=no')
     }
     async function callFilePDF() {
       const reportWindow = openWin()

@@ -34,7 +34,7 @@
 		<defaultValueExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{toDate})]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT table_type, table_name, table_comment, table_rows, avg_row_length
+		<![CDATA[SELECT table_type, table_name, table_comment, table_rows
 FROM information_schema.`TABLES`, (select sleep($P{option})) delay
 WHERE 
 	 information_schema.`TABLES`.`TABLE_SCHEMA` = $P{db} 
@@ -56,14 +56,9 @@ ORDER BY information_schema.`TABLES`.`TABLE_TYPE` DESC,
 		<property name="com.jaspersoft.studio.field.label" value="table_comment"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="TABLES"/>
 	</field>
-	<field name="table_rows" class="java.math.BigInteger">
+	<field name="table_rows" class="java.lang.Double">
 		<property name="com.jaspersoft.studio.field.name" value="TABLE_ROWS"/>
 		<property name="com.jaspersoft.studio.field.label" value="table_rows"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="TABLES"/>
-	</field>
-	<field name="avg_row_length" class="java.math.BigInteger">
-		<property name="com.jaspersoft.studio.field.name" value="AVG_ROW_LENGTH"/>
-		<property name="com.jaspersoft.studio.field.label" value="avg_row_length"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="TABLES"/>
 	</field>
 	<group name="type">
@@ -435,8 +430,8 @@ ORDER BY information_schema.`TABLES`.`TABLE_TYPE` DESC,
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="240" y="0" width="30" height="16" uuid="131ee5e6-ecbc-404f-b472-b7735e7e6126">
+			<textField pattern="#" isBlankWhenNull="true">
+				<reportElement x="220" y="0" width="50" height="16" uuid="131ee5e6-ecbc-404f-b472-b7735e7e6126">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -460,7 +455,7 @@ ORDER BY information_schema.`TABLES`.`TABLE_TYPE` DESC,
 			</image>
 			<pie3DChart>
 				<chart evaluationTime="Report">
-					<reportElement x="57" y="60" width="440" height="300" uuid="bcbece3e-e51f-40e7-8140-a048f90e24c5">
+					<reportElement stretchType="ContainerHeight" x="57" y="60" width="440" height="369" uuid="8ec268a4-645c-4bb9-ae97-3bb3df21bdb3">
 						<property name="com.jaspersoft.studio.unit.y" value="px"/>
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -472,7 +467,7 @@ ORDER BY information_schema.`TABLES`.`TABLE_TYPE` DESC,
 				</chart>
 				<pieDataset>
 					<keyExpression><![CDATA[$F{table_name}]]></keyExpression>
-					<valueExpression><![CDATA[$F{table_rows}]]></valueExpression>
+					<valueExpression><![CDATA[$F{table_rows} != null ? $F{table_rows} : 0]]></valueExpression>
 					<labelExpression><![CDATA[$F{table_name}]]></labelExpression>
 				</pieDataset>
 				<pie3DPlot>

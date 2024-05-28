@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import org.mariadb.jdbc.MariaDbPoolDataSource;
 
 public class Database {
+    // update application.properties
     public static String OUTPUT_PATH = "webapps/kxreport/";
     public static String REPORT_PATH = "/khgroup/report";
     public static String JDBC_URI = "jdbc:mariadb://localhost:3306/";
@@ -49,7 +50,7 @@ public class Database {
         try {
             if (pools.get(db) == null)
                 pools.put(db, new MariaDbPoolDataSource(JDBC_URI + db + "?user=" + USER + "&password=" + PASSWORD
-                        + "&staticGlobal&minPoolSize=0&maxPoolSize=32&maxIdleTime=900&registerJmxPool=false"));
+                        + "&staticGlobal&minPoolSize=0&maxPoolSize=32&maxIdleTime=600&registerJmxPool=false"));
             conn = pools.get(db).getConnection();
         } catch (SQLException e) {
             e.printStackTrace();

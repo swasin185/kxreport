@@ -62,7 +62,7 @@ public class ReportController {
 	};
 
 	private void createTempIdList(Connection conn, String idList) throws SQLException {
-		if (idList != null && idList.indexOf(" ") > 0) {
+		if (conn != null && idList != null && idList.indexOf(" ") > 0) {
 			Statement stmt = conn.createStatement();
 			stmt.execute("drop report temporary table if exists idlist");
 			stmt.execute("create temporary table idlist(id varchar(50))");
