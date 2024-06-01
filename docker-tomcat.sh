@@ -1,7 +1,7 @@
 #!/bin/bash
 docker run -d --rm \
   --name tomcat \
-  --network bridge \
+  --network "host" \
   -p 8888:8080 \
   -v $(pwd)/target:/usr/local/tomcat/webapps \
   -v $(pwd)/target/jasper:/khgroup/report \
