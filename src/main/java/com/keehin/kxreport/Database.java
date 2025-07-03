@@ -49,8 +49,8 @@ public class Database {
             db = "kxtest";
         try {
             if (pools.get(db) == null)
-                pools.put(db, new MariaDbPoolDataSource(JDBC_URI + db + "?user=" + USER + "&password=" + PASSWORD
-                        + "&staticGlobal&minPoolSize=0&maxPoolSize=32&maxIdleTime=600&registerJmxPool=false"));
+            pools.put(db, new MariaDbPoolDataSource(JDBC_URI + db + "?user=" + USER + "&password=" + PASSWORD
+                + "&minPoolSize=0&maxPoolSize=30&maxIdleTime=60"));
             conn = pools.get(db).getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
