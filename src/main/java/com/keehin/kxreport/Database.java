@@ -50,8 +50,8 @@ public class Database {
         try {
             if (pools.get(db) == null)
             pools.put(db, new MariaDbPoolDataSource(JDBC_URI + db + "?user=" + USER + "&password=" + PASSWORD
-                + "&minPoolSize=0&maxPoolSize=30&maxIdleTime=60"
-                + "&useSSL=true&requireSSL=false"));
+                + "&minPoolSize=0&maxPoolSize=30&maxIdleTime=60"));
+                // + "&useSSL=true&requireSSL=false"));
             conn = pools.get(db).getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
