@@ -62,14 +62,13 @@ public class ReportController {
 	};
 
 	private void createTempIdList(Connection conn, String idList) throws SQLException {
-		if (conn != null && idList != null && idList.indexOf(" ") > 0) {
+		if (conn != null && idList != null && !idList.isEmpty()) {
 			Statement stmt = conn.createStatement();
 			stmt.execute("drop report temporary table if exists idlist");
 			stmt.execute("create temporary table idlist(id varchar(50))");
 			stmt.execute("insert into idlist values " + idList);
 		}
 	}
-
 
 	private JasperPrint loadJasperFile(Map<String, Object> params) {
 		JasperPrint report = null;

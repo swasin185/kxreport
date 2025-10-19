@@ -44,3 +44,5 @@ create user 'kxreport'@'localhost' identified by 'kxreport';
 grant select, execute, create temporary tables on *.* to 'kxreport'@'localhost';
 create database kxtest;
 ```
+## Deploy
+copy -ur target/jasper /khgroup/report
