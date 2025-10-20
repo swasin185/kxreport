@@ -18,6 +18,7 @@
         height: 100vh;
         width: 100vw;
       }
+
       .timer {
         font-family: monospace;
         font-weight: bold;
@@ -46,6 +47,16 @@
     </form>
   </body>
   <script lang="js">
+    var mm = 0
+    var ss = 1
+    const timer = document.getElementById('timer')
+    setInterval(() => {
+      timer.textContent = (mm > 9 ? mm : '0' + mm) + ':' + (ss > 9 ? ss : '0' + ss)
+      if (++ss == 60) {
+        mm++
+        ss = 0
+      }
+    }, 1000)
     const urlParams = new URLSearchParams(window.location.search)
     if (urlParams.get("report")) {
       const form = document.getElementById("form")
@@ -57,18 +68,6 @@
           }
         }
       form.submit()
-    }
-    var mm = 0
-    var ss = 1
-    const timer = document.getElementById('timer')
-    setInterval(updateTime, 1000)
-    function updateTime() {
-      timer.textContent = (mm > 9 ? mm : '0' + mm) + ':' + (ss > 9 ? ss : '0' + ss)
-      ss++
-      if (ss == 60) {
-        mm++
-        ss = 0
-      }
     }
   </script>
 </html>
