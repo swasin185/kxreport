@@ -116,7 +116,7 @@
     function createURL(service) {
       const url = new URL(service, window.location.href)
       const data = new FormData(document.getElementById('form'))
-      // url.searchParams.append('app', '');
+      // url.searchParams.append('app', '')
       for (const [key, value] of data.entries()) {
         url.searchParams.append(key, value)
       }

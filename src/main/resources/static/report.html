@@ -62,10 +62,8 @@
       const form = document.getElementById("form")
       for (const key in form.elements)
         if (urlParams.has(key)) {
-          const element = form.elements.namedItem(key);
-          if (element) {
-            element.value = urlParams.get(key);
-          }
+          const element = form.elements.namedItem(key)
+          element.value = urlParams.get(key)
         }
       form.submit()
     }
