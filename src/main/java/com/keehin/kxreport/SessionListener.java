@@ -13,7 +13,7 @@ public class SessionListener implements HttpSessionListener {
     public void sessionCreated(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
         System.out.println("Sess.Created " + code);
-        File dir = new File(Database.OUTPUT_PATH + code);
+        File dir = new File(Database.getOUTPUT_PATH() + code);
 		if (!dir.exists())
 			dir.mkdirs();
     }
@@ -22,7 +22,7 @@ public class SessionListener implements HttpSessionListener {
     public void sessionDestroyed(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
         System.out.println("Sess.Deleted " + code);
-        deleteDirectory(new File(Database.OUTPUT_PATH + code));
+        deleteDirectory(new File(Database.getOUTPUT_PATH() + code));
     }
 
     public static String createHashCode(HttpSession session) {

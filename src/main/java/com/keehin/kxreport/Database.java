@@ -1,41 +1,56 @@
 package com.keehin.kxreport;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 import org.mariadb.jdbc.MariaDbPoolDataSource;
 
 public class Database {
-    // update application.properties
-    public static String OUTPUT_PATH = "webapps/kxreport/";
-    public static String REPORT_PATH = "/khgroup/report";
-    public static String JDBC_URI = "jdbc:mariadb://localhost:3306/";
-    public static String USER = "kxreport";
-    public static String PASSWORD = "kxreport";
     public static final Properties prop = new Properties();
-
     static {
-        try (FileReader input = new FileReader("webapps/kxreport/WEB-INF/classes/application.properties")) {
+        try (InputStream input = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("application.properties")) {
             prop.load(input);
-            OUTPUT_PATH = prop.getProperty("OUTPUT_PATH", OUTPUT_PATH);
-            REPORT_PATH = prop.getProperty("REPORT_PATH", REPORT_PATH);
-            JDBC_URI = prop.getProperty("JDBC_URI", JDBC_URI);
-            USER = prop.getProperty("USER", USER);
-            PASSWORD = prop.getProperty("PASSWORD", PASSWORD);
+            if (prop.getProperty("OUTPUT_PATH") == null)
+                prop.setProperty("OUTPUT_PATH", "webapps/kxreport/");
+            if (prop.getProperty("REPORT_PATH") == null)
+                prop.setProperty("REPORT_PATH", "/khgroup/report/");
+            if (prop.getProperty("JDBC_URI") == null)
+                prop.setProperty("JDBC_URI", "jdbc:mariadb://localhost:3306/");
+            if (prop.getProperty("USER") == null)
+                prop.setProperty("USER", "kxreport");
+            if (prop.getProperty("PASSWORD") == null)
+                prop.setProperty("PASSWORD", "kxreport");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static final SimpleDateFormat DTFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
+    public static String getOUTPUT_PATH() {
+        return prop.getProperty("OUTPUT_PATH");
+    }
+
+    public static String getREPORT_PATH() {
+        return prop.getProperty("REPORT_PATH");
+    }
+
+    public static String getJDBC_URI() {
+        return prop.getProperty("JDBC_URI");
+    }
+
+    public static String getUSER() {
+        return prop.getProperty("USER");
+    }
+
+    public static String getPASSWORD() {
+        return prop.getProperty("PASSWORD");
+    }
 
     private HashMap<String, DataSource> pools = new HashMap<String, DataSource>();
 
@@ -48,15 +63,15 @@ public class Database {
         if (db == null)
             db = "kxtest";
         try {
-            if (pools.get(db) == null)
-            pools.put(db, new MariaDbPoolDataSource(JDBC_URI + db + "?user=" + USER + "&password=" + PASSWORD
-                + "&minPoolSize=0&maxPoolSize=30&maxIdleTime=60"));
-                // + "&useSSL=true&requireSSL=false"));
+            if (pools.get(db) == null) /* If Databse is SSL use &useSSL=true&requireSSL=false */
+                pools.put(db,
+                        new MariaDbPoolDataSource(
+                                getJDBC_URI() + db + "?user=" + getUSER() + "&password=" + getPASSWORD()
+                                        + "&minPoolSize=0&maxPoolSize=30&maxIdleTime=60"));
             conn = pools.get(db).getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return conn;
     }
-
 }

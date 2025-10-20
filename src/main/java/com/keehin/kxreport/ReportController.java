@@ -8,7 +8,9 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +40,8 @@ import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 @RestController
 public class ReportController {
 
+	public final SimpleDateFormat DTFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
+	private static String JASPER = ".jasper";
 	private Database db;
 	private SimpleCsvExporterConfiguration config;
 	private JRCsvExporter exporter;
@@ -45,7 +49,7 @@ public class ReportController {
 	public ReportController() {
 		try {
 			db = new Database();
-			Files.createDirectories(Paths.get(Database.OUTPUT_PATH));
+			Files.createDirectories(Paths.get(Database.getOUTPUT_PATH()));
 			config = new SimpleCsvExporterConfiguration();
 			config.setFieldDelimiter("\t");
 			exporter = new JRCsvExporter();
@@ -57,7 +61,7 @@ public class ReportController {
 	private static FilenameFilter filter = new FilenameFilter() {
 		@Override
 		public boolean accept(File dir, String name) {
-			return name.endsWith(".jasper");
+			return name.endsWith(JASPER);
 		}
 	};
 
@@ -94,23 +98,24 @@ public class ReportController {
 		String dbName = "";
 		String jasperFile = (String) params.get("report");
 		if (jasperFile != null) {
-			if (!jasperFile.contains(".jasper"))
-				jasperFile += ".jasper";
+			if (!jasperFile.contains(JASPER))
+				jasperFile += JASPER;
 		} else {
-			jasperFile = "A00.jasper";
+			jasperFile = "A00" + JASPER;
 		}
-		if (params.get("app") != null && !params.get("app").equals(""))
-			appName = "-" + params.get("app").toString();
-		dbName = (String) params.get("db");
-		File jpFile = new File(Database.REPORT_PATH + appName + "/" + dbName + "/" + jasperFile);
+		if (params.get("app") != null)
+			appName = params.get("app").toString() + "/";
+		if (params.get("db") != null)
+			dbName = params.get("db").toString() + "/";
+		File jpFile = new File(Database.getREPORT_PATH() + appName + dbName + jasperFile);
 		if (!jpFile.exists())
-			jpFile = new File(Database.REPORT_PATH + "/" + jasperFile);
+			jpFile = new File(Database.getREPORT_PATH() + appName + jasperFile);
 		return jpFile.getAbsolutePath();
 	}
 
 	private void logClient(HttpServletRequest req, Map<String, Object> params) {
-		System.out.println(req.getRemoteAddr() + "_" + req.getMethod() + '_' + (String) params.get("db") + "_"
-				+ (String) params.get("report"));
+		System.out.println(req.getRemoteAddr() + "_" + req.getMethod() + '_' + params.get("db").toString() + "_"
+				+ params.get("report").toString());
 	}
 
 	private Map<String, Object> mapParams(Parameter params) {
@@ -147,22 +152,22 @@ public class ReportController {
 	@GetMapping(value = "/json", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<Map<String, String>[]> json() {
 		Map<String, String>[] data = new Map[0];
-		File dir = new File(Database.REPORT_PATH);
+		File dir = new File(Database.getREPORT_PATH());
 		if (dir.exists()) {
 			String[] list = dir.list(ReportController.filter);
 			data = new Map[list.length];
 			int i = 0;
 			for (String fileName : list)
 				try {
-					File file = new File(Database.REPORT_PATH + fileName);
+					File file = new File(Database.getREPORT_PATH() + fileName);
 					JasperPrint report = JasperFillManager
 							.fillReport((JasperReport) JRLoader.loadObjectFromFile(file.getPath()),
 									(Map<String, Object>) null, (Connection) null);
 					if (report != null) {
 						data[i] = new HashMap<>();
-						data[i].put("report", file.getName().substring(0, file.getName().indexOf(".jasper")));
+						data[i].put("report", file.getName().substring(0, file.getName().indexOf(JASPER)));
 						data[i].put("name", report.getName());
-						data[i].put("updated", Database.DTFormat.format(file.lastModified()));
+						data[i].put("updated", this.DTFormat.format(file.lastModified()));
 						i++;
 					}
 				} catch (Exception e) {
@@ -176,14 +181,14 @@ public class ReportController {
 	public String list(HttpServletRequest req) {
 		String html = "<html><head><style>table, th, td { border: 1px solid black;} table {width: 100%;}</style></head><body>";
 		StringBuilder sb = new StringBuilder(html);
-		sb.append("report files in " + Database.REPORT_PATH + "<br>");
+		sb.append("report files in " + Database.getREPORT_PATH() + "<br>");
 		sb.append("session ID: " + req.getSession().getId() + " - cookie: " + req.getCookies() + "<br><br><table>");
-		File dir = new File(Database.REPORT_PATH);
+		File dir = new File(Database.getREPORT_PATH());
 		if (dir.exists()) {
 			int i = 0;
 			String[] list = dir.list(ReportController.filter);
 			for (String fileName : list) {
-				File file = new File(Database.REPORT_PATH + fileName);
+				File file = new File(Database.getREPORT_PATH() + fileName);
 				JasperPrint report = null;
 				try {
 					report = JasperFillManager
@@ -199,7 +204,7 @@ public class ReportController {
 					sb.append("<td>" + report.getName() + "</td>");
 				else
 					sb.append("<td>NO report</td>");
-				sb.append("<td>" + Database.DTFormat.format(file.lastModified()) + "</td>");
+				sb.append("<td>" + this.DTFormat.format(file.lastModified()) + "</td>");
 				sb.append("</tr>");
 			}
 		}
@@ -219,10 +224,16 @@ public class ReportController {
 		return openPDF(request, session, this.mapParams(params));
 	}
 
+	private void removeEmpty(Map<String, Object> params) {
+		params.entrySet().removeIf(
+				e -> e.getValue() == null || e.getValue().toString().isEmpty());
+	}
+
 	@PostMapping(value = "/openPDF", produces = "text/html; charset=UTF-8")
 	public ResponseEntity<StreamingResponseBody> openPDF(HttpServletRequest request, HttpSession session,
 			@RequestParam Map<String, Object> params) {
 		this.logClient(request, params);
+		this.removeEmpty(params);
 		StreamingResponseBody responseBody = null;
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
@@ -246,13 +257,16 @@ public class ReportController {
 	@PostMapping(value = "/filePDF", produces = "text/plain")
 	public String filePDF(HttpServletRequest request, HttpSession session, @RequestParam Map<String, Object> params) {
 		this.logClient(request, params);
+		params.entrySet().removeIf(
+				e -> e.getValue() == null || e.getValue().toString().isEmpty());
 		String outputFile = null;
 		String sessId = SessionListener.createHashCode(session);
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
-			outputFile = sessId + "/" + (String) params.get("report") + ".pdf";
+			outputFile = sessId + "/" + params.get(params.get("saveFile") == null ? "report" : "saveFile").toString()
+					+ ".pdf";
 			JasperExportManager.exportReportToPdfStream(jasperPrint,
-					new FileOutputStream(Database.OUTPUT_PATH + outputFile));
+					new FileOutputStream(Database.getOUTPUT_PATH() + outputFile));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -294,10 +308,10 @@ public class ReportController {
 		String sessId = SessionListener.createHashCode(session);
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
-			outputFile = sessId + "/" + (String) params.get("report") + ".csv";
+			outputFile = sessId + "/" + params.get("report").toString() + ".csv";
 			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 			exporter.setExporterOutput(
-					new SimpleWriterExporterOutput(new FileOutputStream(Database.OUTPUT_PATH + outputFile)));
+					new SimpleWriterExporterOutput(new FileOutputStream(Database.getOUTPUT_PATH() + outputFile)));
 			exporter.setConfiguration(this.config);
 			exporter.exportReport();
 		} catch (Exception e) {

@@ -22,16 +22,19 @@ sudo cp -ur ./target/jasper/* /khgroup/report
 
 ## Jasper Report Folder
 ```
-[khgroup]
-|-[report]
-| |-[database]
-| | |-- *.jasper
-| |-- *.jasper
-|-[report-app]
-| |-[database]
-| | |-- *.jasper
-| |-- *.jasper
-
+khgroup/
+├── report/
+│   ├── app/
+│   │   ├── database/
+│   │   │   └── *.jasper
+│   │   └── database/
+│   │       └── *.jasper
+│   ├── app/
+│   │   ├── database/
+│   │   │   └── *.jasper
+│   │   └── database/
+│   │       └── *.jasper
+│   └── *.jasper
 ```
 
 ## MariaDB user

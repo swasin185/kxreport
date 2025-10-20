@@ -54,25 +54,19 @@ public class Parameter {
     }
 
     public String getFromDate() {
-        if ("".equals(fromDate))
-            return null;
         return this.fromDate;
     }
 
     public void setFromDate(String fromDate) {
-        if (!"".equals(fromDate))
-            this.fromDate = fromDate;
+        this.fromDate = fromDate;
     }
 
     public String getToDate() {
-        if ("".equals(toDate))
-            return null;
         return this.toDate;
     }
 
     public void setToDate(String toDate) {
-        if (!"".equals(toDate))
-            this.toDate = toDate;
+        this.toDate = toDate;
     }
 
     public String getFromId() {

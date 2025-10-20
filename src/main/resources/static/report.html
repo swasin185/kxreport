@@ -27,16 +27,10 @@
       }
     </style>
   </head>
+
   <body>
     <div class="timer" id="timer"></div>
-    <form
-      id="form"
-      name="form"
-      action="openPDF"
-      method="post"
-      target="_self"
-      type="hidden"
-    >
+    <form id="form" action="openPDF" method="post" target="_self" type="hidden">
       <input type="hidden" id="app" name="app" />
       <input type="hidden" id="report" name="report" />
       <input type="hidden" id="db" name="db" />
@@ -48,23 +42,21 @@
       <input type="hidden" id="toId" name="toId" />
       <input type="hidden" id="option" name="option" />
       <input type="hidden" id="idList" name="idList" />
+      <input type="hidden" id="saveFile" name="saveFile" />
     </form>
   </body>
   <script lang="js">
     const urlParams = new URLSearchParams(window.location.search)
-    if (urlParams.get('report') > '') {
-      document.getElementById('app').value = urlParams.get('app')
-      document.getElementById('report').value = urlParams.get('report')
-      document.getElementById('db').value = urlParams.get('db')
-      document.getElementById('comCode').value = urlParams.get('comCode')
-      document.getElementById('comName').value = urlParams.get('comName')
-      document.getElementById('fromDate').value = urlParams.get('fromDate')
-      document.getElementById('toDate').value = urlParams.get('toDate')
-      document.getElementById('fromId').value = urlParams.get('fromId')
-      document.getElementById('toId').value = urlParams.get('toId')
-      document.getElementById('option').value = urlParams.get('option')
-      document.getElementById('idList').value = urlParams.get('idList')
-      document.getElementById("form").submit()
+    if (urlParams.get("report")) {
+      const form = document.getElementById("form")
+      for (const key in form.elements)
+        if (urlParams.has(key)) {
+          const element = form.elements.namedItem(key);
+          if (element) {
+            element.value = urlParams.get(key);
+          }
+        }
+      form.submit()
     }
     var mm = 0
     var ss = 1

@@ -11,16 +11,17 @@
         justify-content: center;
         align-items: center;
         width: 400px;
-        height: 440px;
+        height: 450px;
         border: 1px solid black;
         background-color: lightgrey;
       }
     </style>
   </head>
-  <body bgcolor="black">
+
+  <body style="background-color: black">
     <div class="center">
       <form
-        name="form"
+        id="form"
         action="openPDF"
         method="post"
         target="report"
@@ -89,6 +90,12 @@
             <td><label for="idList">ID List</label></td>
             <td><input type="text" id="idList" name="idList" value="" /></td>
           </tr>
+          <tr>
+            <td><label for="saveFile">Save File</label></td>
+            <td>
+              <input type="text" id="saveFile" name="saveFile" value="" />
+            </td>
+          </tr>
         </table>
         <button type="submit">Submit Form Report</button>
       </form>
@@ -101,21 +108,21 @@
     let today = new Date().toISOString().substring(0, 10)
     document.getElementById('toDate').value = today
     document.getElementById('fromDate').value = today.substring(0, 4) + '-01-01'
-    async function createURL(service) {
-      let url = new URL(service, window.location.href)
-      url.searchParams.append('app', '')
-      url.searchParams.append('report', document.getElementById('report').value)
-      url.searchParams.append('db',document.getElementById('db').value)
-      url.searchParams.append('comCode', document.getElementById('comCode').value)
-      url.searchParams.append('comName', document.getElementById('comName').value)
-      url.searchParams.append('fromDate', document.getElementById('fromDate').value)
-      url.searchParams.append('toDate', document.getElementById('toDate').value)
-      url.searchParams.append('fromId', document.getElementById('fromId').value)
-      url.searchParams.append('toId', document.getElementById('toId').value)
-      url.searchParams.append('option', document.getElementById('option').value)
-      url.searchParams.append('idList', document.getElementById('idList').value)
-      return url
+
+    /* Retrieves all form data as URLSearchParams.
+     * @param {string} service - The base service path (e.g., 'filePDF').
+     * @returns {URL} - The constructed URL object.
+     */
+    function createURL(service) {
+      const url = new URL(service, window.location.href)
+      const data = new FormData(document.getElementById('form'))
+      // url.searchParams.append('app', '');
+      for (const [key, value] of data.entries()) {
+        url.searchParams.append(key, value)
+      }
+      return url;
     }
+
     function openWin(htmlFile = 'report.html') {
       return window.open(htmlFile, 'report', 'width=800,height=800,toolbar=no,menubar=no')
     }
