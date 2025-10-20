@@ -31,19 +31,19 @@
 
   <body>
     <div class="timer" id="timer"></div>
-    <form id="form" action="openPDF" method="post" target="_self" type="hidden">
-      <input type="hidden" id="app" name="app" />
-      <input type="hidden" id="report" name="report" />
-      <input type="hidden" id="db" name="db" />
-      <input type="hidden" id="comCode" name="comCode" />
-      <input type="hidden" id="comName" name="comName" />
-      <input type="hidden" id="fromDate" name="fromDate" />
-      <input type="hidden" id="toDate" name="toDate" />
-      <input type="hidden" id="fromId" name="fromId" />
-      <input type="hidden" id="toId" name="toId" />
-      <input type="hidden" id="option" name="option" />
-      <input type="hidden" id="idList" name="idList" />
-      <input type="hidden" id="saveFile" name="saveFile" />
+    <form id="form" action="execPDF" method="post" target="_self" type="hidden">
+      <input type="hidden" name="app" />
+      <input type="hidden" name="report" />
+      <input type="hidden" name="db" />
+      <input type="hidden" name="comCode" />
+      <input type="hidden" name="comName" />
+      <input type="hidden" name="fromDate" />
+      <input type="hidden" name="toDate" />
+      <input type="hidden" name="fromId" />
+      <input type="hidden" name="toId" />
+      <input type="hidden" name="option" />
+      <input type="hidden" name="idList" />
+      <input type="hidden" name="saveFile" />
     </form>
   </body>
   <script lang="js">
@@ -57,15 +57,15 @@
         ss = 0
       }
     }, 1000)
-    const urlParams = new URLSearchParams(window.location.search)
-    if (urlParams.get("report")) {
-      const form = document.getElementById("form")
-      for (const key in form.elements)
-        if (urlParams.has(key)) {
-          const element = form.elements.namedItem(key)
-          element.value = urlParams.get(key)
-        }
-      form.submit()
-    }
+    // const urlParams = new URLSearchParams(window.location.search)
+    // if (urlParams.get("report")) {
+    //   const form = document.getElementById("form")
+    //   for (const key in form.elements)
+    //     if (urlParams.has(key)) {
+    //       const element = form.elements.namedItem(key)
+    //       element.value = urlParams.get(key)
+    //     }
+    //   form.submit()
+    // }
   </script>
 </html>

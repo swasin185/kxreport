@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -113,35 +114,11 @@ public class ReportController {
 		return jpFile.getAbsolutePath();
 	}
 
-	private void logClient(HttpServletRequest req, Map<String, Object> params) {
-		System.out.println(req.getRemoteAddr() + "_" + req.getMethod() + '_' + params.get("db").toString() + "_"
-				+ params.get("report").toString());
-	}
-
-	private Map<String, Object> mapParams(Parameter params) {
-		Map<String, Object> mapParams = new HashMap<String, Object>();
-		if (params.getApp() != null)
-			mapParams.put("app", params.getApp());
-		if (params.getDb() != null)
-			mapParams.put("db", params.getDb());
-		if (params.getComCode() != null)
-			mapParams.put("comCode", params.getComCode());
-		if (params.getComName() != null)
-			mapParams.put("comName", params.getComName());
-		if (params.getReport() != null)
-			mapParams.put("report", params.getReport());
-		if (params.getFromDate() != null)
-			mapParams.put("fromDate", params.getFromDate());
-		if (params.getToDate() != null)
-			mapParams.put("toDate", params.getToDate());
-		if (params.getFromId() != null)
-			mapParams.put("fromId", params.getFromId());
-		if (params.getToId() != null)
-			mapParams.put("toId", params.getToId());
-		if (params.getOption() != null)
-			mapParams.put("option", params.getOption());
-		return mapParams;
-	}
+	// private void logClient(HttpServletRequest req, Map<String, Object> params) {
+	// System.out.println(req.getRemoteAddr() + "_" + req.getMethod() + '_' +
+	// params.get("db").toString() + "_"
+	// + params.get("report").toString());
+	// }
 
 	// @GetMapping
 	// public String index() {
@@ -212,16 +189,10 @@ public class ReportController {
 		return sb.toString();
 	}
 
-	@GetMapping(value = "/getPDF", produces = "application/pdf; charset=UTF-8")
+	@GetMapping(value = "/getPDF", produces = "text/html; charset=UTF-8")
 	public ResponseEntity<StreamingResponseBody> getPDF(HttpServletRequest request, HttpSession session,
 			@RequestParam Map<String, Object> params) {
-		return openPDF(request, session, params);
-	}
-
-	@PostMapping(value = "/execPDF", produces = "application/pdf; charset=UTF-8")
-	public ResponseEntity<StreamingResponseBody> execPDF(HttpServletRequest request, HttpSession session,
-			@RequestParam Parameter params) {
-		return openPDF(request, session, this.mapParams(params));
+		return this.openPDF(request, session, params);
 	}
 
 	private void removeEmpty(Map<String, Object> params) {
@@ -229,10 +200,10 @@ public class ReportController {
 				e -> e.getValue() == null || e.getValue().toString().isEmpty());
 	}
 
-	@PostMapping(value = "/openPDF", produces = "text/html; charset=UTF-8")
+	@PostMapping(value = "/openPDF", produces = "application/pdf")
 	public ResponseEntity<StreamingResponseBody> openPDF(HttpServletRequest request, HttpSession session,
-			@RequestParam Map<String, Object> params) {
-		this.logClient(request, params);
+			@RequestBody Map<String, Object> params) {
+		// this.logClient(request, params);
 		this.removeEmpty(params);
 		StreamingResponseBody responseBody = null;
 		try {
@@ -255,10 +226,9 @@ public class ReportController {
 	}
 
 	@PostMapping(value = "/filePDF", produces = "text/plain")
-	public String filePDF(HttpServletRequest request, HttpSession session, @RequestParam Map<String, Object> params) {
-		this.logClient(request, params);
-		params.entrySet().removeIf(
-				e -> e.getValue() == null || e.getValue().toString().isEmpty());
+	public String filePDF(HttpServletRequest request, HttpSession session, @RequestBody Map<String, Object> params) {
+		// this.logClient(request, params);
+		this.removeEmpty(params);
 		String outputFile = null;
 		String sessId = SessionListener.createHashCode(session);
 		try {
@@ -276,7 +246,8 @@ public class ReportController {
 	@PostMapping(value = "/openCSV", produces = "text/csv; charset=UTF-8")
 	public ResponseEntity<StreamingResponseBody> openCSV(HttpServletRequest request, HttpSession session,
 			@RequestParam Map<String, Object> params) {
-		this.logClient(request, params);
+		// this.logClient(request, params);
+		this.removeEmpty(params);
 		StreamingResponseBody responseBody = null;
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
@@ -303,7 +274,8 @@ public class ReportController {
 
 	@PostMapping(value = "/fileCSV", produces = "text/plain")
 	public String fileCSV(HttpServletRequest request, HttpSession session, @RequestParam Map<String, Object> params) {
-		this.logClient(request, params);
+		// this.logClient(request, params);
+		this.removeEmpty(params);
 		String outputFile = null;
 		String sessId = SessionListener.createHashCode(session);
 		try {

@@ -22,79 +22,56 @@
     <div class="center">
       <form
         id="form"
-        action="openPDF"
+        action="execPDF"
         method="post"
         target="report"
-        onsubmit="openWin()"
+        onsubmit="openWin"
         style="border: 1px solid grey; padding: 10px"
       >
         <table>
           <tr>
             <td><label for="report">Report</label></td>
-            <td>
-              <input
-                type="text"
-                id="report"
-                name="report"
-                value="A00"
-                required
-              />
-            </td>
+            <td><input type="text" name="report" value="A00" required /></td>
           </tr>
           <tr>
             <td><label for="db">Database</label></td>
-            <td>
-              <input type="text" id="db" name="db" value="kxtest" required />
-            </td>
+            <td><input type="text" name="db" value="kxtest" required /></td>
           </tr>
           <tr>
             <td><label for="comCode">Company Code</label></td>
-            <td>
-              <input type="number" id="comCode" name="comCode" value="1" />
-            </td>
+            <td><input type="number" id="comCode" name="comCode" /></td>
           </tr>
           <tr>
             <td><label for="comName">Company Name</label></td>
-            <td>
-              <input
-                type="text"
-                id="comName"
-                name="comName"
-                value="Company Name"
-              />
-            </td>
+            <td><input type="text" name="comName" value="Company Name" /></td>
           </tr>
           <tr>
             <td><label for="fromDate">From Date</label></td>
-            <td><input type="date" id="fromDate" name="fromDate" /></td>
+            <td><input type="date" name="fromDate" /></td>
           </tr>
           <tr>
             <td><label for="toDate">To Date</label></td>
-            <td><input type="date" id="toDate" name="toDate" /></td>
+            <td><input type="date" name="toDate" /></td>
           </tr>
           <tr>
             <td><label for="fromId">From ID</label></td>
-            <td>
-              <input type="text" id="fromId" name="fromId" value="000000" />
-            </td>
+            <td><input type="text" name="fromId" value="000000" /></td>
           </tr>
           <tr>
             <td><label for="toId">To ID</label></td>
-            <td><input type="text" id="toId" name="toId" value="999999" /></td>
+            <td><input type="text" name="toId" value="999999" /></td>
           </tr>
           <tr>
             <td><label for="option">Option</label></td>
-            <td><input type="number" id="option" name="option" value="3" /></td>
+            <td><input type="number" name="option" value="3" /></td>
           </tr>
           <tr>
             <td><label for="idList">ID List</label></td>
-            <td><input type="text" id="idList" name="idList" value="" /></td>
+            <td><input type="text" name="idList" value="" /></td>
           </tr>
           <tr>
             <td><label for="saveFile">Save File</label></td>
-            <td>
-              <input type="text" id="saveFile" name="saveFile" value="" />
-            </td>
+            <td><input type="text" name="saveFile" value="" /></td>
           </tr>
         </table>
         <button type="submit">Submit Form Report</button>
@@ -106,8 +83,8 @@
   </body>
   <script lang="js">
     let today = new Date().toISOString().substring(0, 10)
-    document.getElementById('toDate').value = today
-    document.getElementById('fromDate').value = today.substring(0, 4) + '-01-01'
+    document.getElementsByName('toDate')[0].value = today
+    document.getElementsByName('fromDate')[0].value = today.substring(0, 4) + '-01-01'
 
     /* Retrieves all form data as URLSearchParams.
      * @param {string} service - The base service path (e.g., 'filePDF').
@@ -122,19 +99,28 @@
       }
       return url;
     }
-
     function openWin(htmlFile = 'report.html') {
       return window.open(htmlFile, 'report', 'width=800,height=800,toolbar=no,menubar=no')
     }
     async function callFilePDF() {
+      const data = Object.fromEntries(new FormData(document.getElementById('form')).entries());
       const reportWindow = openWin()
-      const url = await createURL('filePDF')
-      const response = await fetch(url, { method: 'POST' })
+      const response = await fetch('filePDF', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
       reportWindow.location.href = await response.text()
     }
     async function callOpenPDF() {
-      const url = await createURL('report.html')
-      openWin(url.toString())
+      const data = Object.fromEntries(new FormData(document.getElementById('form')).entries());
+      const reportWindow = openWin()
+      const response = await fetch('openPDF', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      reportWindow.location.href = URL.createObjectURL(await response.blob())
     }
     async function callFileCSV() {
       const url = await createURL('fileCSV')
