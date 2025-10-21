@@ -26,19 +26,19 @@ public class Database {
         }
     }
 
-    public static String getOUTPUT_PATH() {
+    public static String getOutputPath() {
         return prop.getProperty(OUTPUT_PATH);
     }
 
-    public static String getREPORT_PATH() {
+    public static String getReportPath() {
         return prop.getProperty(REPORT_PATH);
     }
 
-    public static String getJDBC_URI() {
+    public static String getJdbcUri() {
         return prop.getProperty(JDBC_URI);
     }
 
-    public static String getDB_CONFIG() {
+    public static String getDbConfig() {
         return prop.getProperty(DB_CONFIG);
     }
 
@@ -59,7 +59,7 @@ public class Database {
                     return conn;
             }
             pools.put(db, new MariaDbPoolDataSource(
-                    Database.getJDBC_URI() + db + Database.getDB_CONFIG()));
+                    Database.getJdbcUri() + db + Database.getDbConfig()));
             conn = pools.get(db).getConnection();
         } catch (SQLException e) {
             e.printStackTrace();

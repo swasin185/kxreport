@@ -1,4 +1,5 @@
 #!/bin/bash
+#systemctl stop tomcat10
 docker run -d --rm \
   --name tomcat \
   --network "host" \

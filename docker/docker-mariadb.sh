@@ -1,4 +1,5 @@
 #!/bin/bash
+#systemctl stop mysql
 docker run -d --rm  \
   --name mariadb \
   --network host \

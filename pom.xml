@@ -70,11 +70,6 @@
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<!-- <webResources>
-            			<resource>
-					      	<directory>output</directory>
-            			</resource>
-          			</webResources>  -->
 					<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
 				</configuration>
 			</plugin>

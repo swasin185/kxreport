@@ -5,15 +5,23 @@ import java.io.File;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class SessionListener implements HttpSessionListener {
+
+    private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
+
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
-        System.out.println("Sess.Created " + code);
-        File dir = new File(Database.getOUTPUT_PATH() + code);
+        logger.info("Sess.Created " + code);
+        File dir = new File(Database.getOutputPath() + code);
 		if (!dir.exists())
 			dir.mkdirs();
     }
@@ -21,8 +29,8 @@ public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
-        System.out.println("Sess.Deleted " + code);
-        deleteDirectory(new File(Database.getOUTPUT_PATH() + code));
+        logger.info("Sess.Deleted " + code);
+        if(deleteDirectory(new File(Database.getOutputPath() + code)));
     }
 
     public static String createHashCode(HttpSession session) {
@@ -37,7 +45,7 @@ public class SessionListener implements HttpSessionListener {
             File[] files = directory.listFiles();
             if (files != null) {
                 for (File file : files) 
-                    file.delete();
+                    if (file.delete());
             }
         }
         return directory.delete();

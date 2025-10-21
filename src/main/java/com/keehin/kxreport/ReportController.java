@@ -30,7 +30,7 @@ public class ReportController {
 		try {
 			logger.info("KXREPORT WELCOME !!!");
 			db = new Database();
-			Files.createDirectories(Paths.get(Database.getOUTPUT_PATH()));
+			Files.createDirectories(Paths.get(Database.getOutputPath()));
 			config = new SimpleCsvExporterConfiguration();
 			config.setFieldDelimiter("\t");
 			exporter = new JRCsvExporter();
@@ -92,9 +92,9 @@ public class ReportController {
 			appName = params.get("app").toString() + "/";
 		if (params.get("db") != null)
 			dbName = params.get("db").toString() + "/";
-		File jpFile = new File(Database.getREPORT_PATH() + appName + dbName + jasperFile);
+		File jpFile = new File(Database.getReportPath() + appName + dbName + jasperFile);
 		if (!jpFile.exists())
-			jpFile = new File(Database.getREPORT_PATH() + appName + jasperFile);
+			jpFile = new File(Database.getReportPath() + appName + jasperFile);
 		return jpFile.getAbsolutePath();
 	}
 
@@ -102,12 +102,12 @@ public class ReportController {
 	@GetMapping(value = "/json", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<Map<String, String>[]> json() {
 		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-		File dir = new File(Database.getREPORT_PATH());
+		File dir = new File(Database.getReportPath());
 		if (dir.exists()) {
 			String[] list = dir.list(ReportController.filter);
 			for (String fileName : list)
 				try {
-					File file = new File(Database.getREPORT_PATH() + fileName);
+					File file = new File(Database.getReportPath() + fileName);
 					JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(file.getPath());
 					if (report != null) {
 						Map<String, String> reportData = new HashMap<>();
@@ -134,7 +134,7 @@ public class ReportController {
 
 		String html = "<html><head><style>table, th, td { border: 1px solid black; text-align: center; } table { border-collapse: collapse; width: 100%; }</style></head><body>";
 		StringBuilder sb = new StringBuilder(html);
-		sb.append("report files in " + Database.getREPORT_PATH() + "<br>");
+		sb.append("report files in " + Database.getReportPath() + "<br>");
 		sb.append("session ID: " + request.getSession().getId() + " - cookie: " + request.getCookies()
 				+ "<br><br><table>");
 		sb.append("<tr><th>#</th><th>File Name</th><th>Report Name</th><th>Last Updated</th><th>Size(K)</th></tr>");
@@ -204,7 +204,7 @@ public class ReportController {
 			outputFile = sessId + "/" + params.get(params.get("saveFile") == null ? "report" : "saveFile").toString()
 					+ ".pdf";
 			JasperExportManager.exportReportToPdfStream(jasperPrint,
-					new FileOutputStream(Database.getOUTPUT_PATH() + outputFile));
+					new FileOutputStream(Database.getOutputPath() + outputFile));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -254,7 +254,7 @@ public class ReportController {
 					+ ".csv";
 			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 			exporter.setExporterOutput(
-					new SimpleWriterExporterOutput(new FileOutputStream(Database.getOUTPUT_PATH() + outputFile)));
+					new SimpleWriterExporterOutput(new FileOutputStream(Database.getOutputPath() + outputFile)));
 			exporter.setConfiguration(this.config);
 			exporter.exportReport();
 		} catch (Exception e) {
