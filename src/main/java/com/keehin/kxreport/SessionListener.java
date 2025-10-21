@@ -30,7 +30,7 @@ public class SessionListener implements HttpSessionListener {
     public void sessionDestroyed(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
         logger.info("Sess.Deleted " + code);
-        if(deleteDirectory(new File(Database.getOutputPath() + code)));
+        deleteDirectory(new File(Database.getOutputPath() + code));
     }
 
     public static String createHashCode(HttpSession session) {
@@ -45,7 +45,8 @@ public class SessionListener implements HttpSessionListener {
             File[] files = directory.listFiles();
             if (files != null) {
                 for (File file : files) 
-                    if (file.delete());
+                    if (!file.delete()) 
+                        logger.error("Session auto delete " + file.getName());
             }
         }
         return directory.delete();

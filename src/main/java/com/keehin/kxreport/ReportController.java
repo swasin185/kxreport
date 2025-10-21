@@ -16,12 +16,12 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@CrossOrigin // (origins = "http://localhost:8080", allowCredentials = "true")
+@CrossOrigin
 @RestController
 public class ReportController {
 	private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
-	public final SimpleDateFormat DTFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
-	private static String JASPER = ".jasper";
+	private final SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
+	private static final String jasperExt = ".jasper";
 	private Database db;
 	private SimpleCsvExporterConfiguration config;
 	private JRCsvExporter exporter;
@@ -42,7 +42,7 @@ public class ReportController {
 	private static FilenameFilter filter = new FilenameFilter() {
 		@Override
 		public boolean accept(File dir, String name) {
-			return name.endsWith(JASPER);
+			return name.endsWith(jasperExt);
 		}
 	};
 
@@ -83,10 +83,10 @@ public class ReportController {
 		String dbName = "";
 		String jasperFile = (String) params.get("report");
 		if (jasperFile != null) {
-			if (!jasperFile.contains(JASPER))
-				jasperFile += JASPER;
+			if (!jasperFile.contains(jasperExt))
+				jasperFile += jasperExt;
 		} else {
-			jasperFile = "A00" + JASPER;
+			jasperFile = "A00" + jasperExt;
 		}
 		if (params.get("app") != null)
 			appName = params.get("app").toString() + "/";
@@ -111,9 +111,9 @@ public class ReportController {
 					JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(file.getPath());
 					if (report != null) {
 						Map<String, String> reportData = new HashMap<>();
-						reportData.put("report", file.getName().substring(0, file.getName().indexOf(JASPER)));
+						reportData.put("report", file.getName().substring(0, file.getName().indexOf(jasperExt)));
 						reportData.put("name", report.getName());
-						reportData.put("updated", this.DTFormat.format(file.lastModified()));
+						reportData.put("updated", this.dtFormat.format(file.lastModified()));
 						long kilobytes = file.length() / 1024;
 						reportData.put("size", String.valueOf(kilobytes));
 						data.add(reportData);
