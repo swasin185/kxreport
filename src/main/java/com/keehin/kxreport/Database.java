@@ -12,44 +12,34 @@ import javax.sql.DataSource;
 import org.mariadb.jdbc.MariaDbPoolDataSource;
 
 public class Database {
-    public static final Properties prop = new Properties();
+    private static final String OUTPUT_PATH = "OUTPUT_PATH";
+    private static final String REPORT_PATH = "REPORT_PATH";
+    private static final String JDBC_URI = "JDBC_URI";
+    private static final String DB_CONFIG = "DB_CONFIG";
+    private static final Properties prop = new Properties();
     static {
         try (InputStream input = Thread.currentThread().getContextClassLoader()
                 .getResourceAsStream("application.properties")) {
             prop.load(input);
-            if (prop.getProperty("OUTPUT_PATH") == null)
-                prop.setProperty("OUTPUT_PATH", "webapps/kxreport/");
-            if (prop.getProperty("REPORT_PATH") == null)
-                prop.setProperty("REPORT_PATH", "/khgroup/report/");
-            if (prop.getProperty("JDBC_URI") == null)
-                prop.setProperty("JDBC_URI", "jdbc:mariadb://localhost:3306/");
-            if (prop.getProperty("USER") == null)
-                prop.setProperty("USER", "kxreport");
-            if (prop.getProperty("PASSWORD") == null)
-                prop.setProperty("PASSWORD", "kxreport");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static String getOUTPUT_PATH() {
-        return prop.getProperty("OUTPUT_PATH");
+        return prop.getProperty(OUTPUT_PATH);
     }
 
     public static String getREPORT_PATH() {
-        return prop.getProperty("REPORT_PATH");
+        return prop.getProperty(REPORT_PATH);
     }
 
     public static String getJDBC_URI() {
-        return prop.getProperty("JDBC_URI");
+        return prop.getProperty(JDBC_URI);
     }
 
-    public static String getUSER() {
-        return prop.getProperty("USER");
-    }
-
-    public static String getPASSWORD() {
-        return prop.getProperty("PASSWORD");
+    public static String getDB_CONFIG() {
+        return prop.getProperty(DB_CONFIG);
     }
 
     private HashMap<String, DataSource> pools = new HashMap<String, DataSource>();
@@ -63,11 +53,13 @@ public class Database {
         if (db == null)
             db = "kxtest";
         try {
-            if (pools.get(db) == null) /* If Databse is SSL use &useSSL=true&requireSSL=false */
-                pools.put(db,
-                        new MariaDbPoolDataSource(
-                                getJDBC_URI() + db + "?user=" + getUSER() + "&password=" + getPASSWORD()
-                                        + "&minPoolSize=0&maxPoolSize=30&maxIdleTime=60"));
+            if (pools.get(db) != null) {
+                conn = pools.get(db).getConnection();
+                if (conn != null)
+                    return conn;
+            }
+            pools.put(db, new MariaDbPoolDataSource(
+                    Database.getJDBC_URI() + db + Database.getDB_CONFIG()));
             conn = pools.get(db).getConnection();
         } catch (SQLException e) {
             e.printStackTrace();

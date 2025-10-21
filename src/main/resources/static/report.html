@@ -1,71 +1,40 @@
 <!DOCTYPE html>
-<html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KxReport</title>
-    <style scoped>
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0;
-        padding: 0;
-        background-color: black;
-        background-image: url("./img/tesseract.gif");
-        background-position: center;
-        background-repeat: no-repeat;
-        height: 100vh;
-        width: 100vw;
-      }
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>KxReport</title>
+        <style>
+            body {
+                background: black url("./img/tesseract.gif") center no-repeat;
+                height: 100vh;
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .timer {
+                font: bold 2em monospace;
+                color: white;
+                padding-bottom: 120px;
+            }
+        </style>
+    </head>
 
-      .timer {
-        font-family: monospace;
-        font-weight: bold;
-        font-size: 2em;
-        color: white;
-        padding-bottom: 120px;
-      }
-    </style>
-  </head>
+    <body>
+        <div class="timer" id="timer"></div>
+    </body>
 
-  <body>
-    <div class="timer" id="timer"></div>
-    <form id="form" action="execPDF" method="post" target="_self" type="hidden">
-      <input type="hidden" name="app" />
-      <input type="hidden" name="report" />
-      <input type="hidden" name="db" />
-      <input type="hidden" name="comCode" />
-      <input type="hidden" name="comName" />
-      <input type="hidden" name="fromDate" />
-      <input type="hidden" name="toDate" />
-      <input type="hidden" name="fromId" />
-      <input type="hidden" name="toId" />
-      <input type="hidden" name="option" />
-      <input type="hidden" name="idList" />
-      <input type="hidden" name="saveFile" />
-    </form>
-  </body>
-  <script lang="js">
-    var mm = 0
-    var ss = 1
-    const timer = document.getElementById('timer')
-    setInterval(() => {
-      timer.textContent = (mm > 9 ? mm : '0' + mm) + ':' + (ss > 9 ? ss : '0' + ss)
-      if (++ss == 60) {
-        mm++
-        ss = 0
-      }
-    }, 1000)
-    // const urlParams = new URLSearchParams(window.location.search)
-    // if (urlParams.get("report")) {
-    //   const form = document.getElementById("form")
-    //   for (const key in form.elements)
-    //     if (urlParams.has(key)) {
-    //       const element = form.elements.namedItem(key)
-    //       element.value = urlParams.get(key)
-    //     }
-    //   form.submit()
-    // }
-  </script>
+    <script lang="js">
+        var mm = 0
+        var ss = 0
+        const timer = document.getElementById('timer')
+        setInterval(() => {
+          if (++ss == 60) {
+            mm++
+            ss = 0
+          }
+          timer.textContent = (mm > 9 ? mm : '0' + mm) + ':' + (ss > 9 ? ss : '0' + ss)
+        }, 1000)
+    </script>
 </html>
