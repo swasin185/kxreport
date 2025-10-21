@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class ReportController {
 	private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
 	private final SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
-	private static final String jasperExt = ".jasper";
+	private static final String JASPER = ".jasper";
 	private Database db;
 	private SimpleCsvExporterConfiguration config;
 	private JRCsvExporter exporter;
@@ -42,7 +42,7 @@ public class ReportController {
 	private static FilenameFilter filter = new FilenameFilter() {
 		@Override
 		public boolean accept(File dir, String name) {
-			return name.endsWith(jasperExt);
+			return name.endsWith(JASPER);
 		}
 	};
 
@@ -83,10 +83,10 @@ public class ReportController {
 		String dbName = "";
 		String jasperFile = (String) params.get("report");
 		if (jasperFile != null) {
-			if (!jasperFile.contains(jasperExt))
-				jasperFile += jasperExt;
+			if (!jasperFile.contains(JASPER))
+				jasperFile += JASPER;
 		} else {
-			jasperFile = "A00" + jasperExt;
+			jasperFile = "A00" + JASPER;
 		}
 		if (params.get("app") != null)
 			appName = params.get("app").toString() + "/";
@@ -111,7 +111,7 @@ public class ReportController {
 					JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(file.getPath());
 					if (report != null) {
 						Map<String, String> reportData = new HashMap<>();
-						reportData.put("report", file.getName().substring(0, file.getName().indexOf(jasperExt)));
+						reportData.put("report", file.getName().substring(0, file.getName().indexOf(JASPER)));
 						reportData.put("name", report.getName());
 						reportData.put("updated", this.dtFormat.format(file.lastModified()));
 						long kilobytes = file.length() / 1024;
@@ -124,37 +124,6 @@ public class ReportController {
 		}
 		Map<String, String>[] json = data.toArray(new Map[0]);
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(json);
-	}
-
-	@GetMapping(value = "/list", produces = "text/html; charset=UTF-8")
-	public String list(HttpServletRequest request) {
-		ReportController.logging(request);
-		ResponseEntity<Map<String, String>[]> response = this.json();
-		Map<String, String>[] data = response.getBody();
-
-		String html = "<html><head><style>table, th, td { border: 1px solid black; text-align: center; } table { border-collapse: collapse; width: 100%; }</style></head><body>";
-		StringBuilder sb = new StringBuilder(html);
-		sb.append("report files in " + Database.getReportPath() + "<br>");
-		sb.append("session ID: " + request.getSession().getId() + " - cookie: " + request.getCookies()
-				+ "<br><br><table>");
-		sb.append("<tr><th>#</th><th>File Name</th><th>Report Name</th><th>Last Updated</th><th>Size(K)</th></tr>");
-		if (data != null && data.length > 0) {
-			int i = 0;
-			for (Map<String, String> reportData : data) {
-				i++;
-				sb.append("<tr>");
-				sb.append("<td>" + i + "</td>");
-				sb.append("<td>" + reportData.get("report") + "</td>");
-				sb.append("<td>" + reportData.get("name") + "</td>");
-				sb.append("<td>" + reportData.get("updated") + "</td>");
-				sb.append("<td>" + reportData.get("size") + "</td>");
-				sb.append("</tr>");
-			}
-		} else
-			sb.append("<tr><td colspan='4'>No reports found or an error occurred.</td></tr>");
-
-		sb.append("</table></body></html>");
-		return sb.toString();
 	}
 
 	@GetMapping(value = "/getPDF", produces = "text/html; charset=UTF-8")
