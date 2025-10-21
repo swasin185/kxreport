@@ -6,5 +6,5 @@ docker run -d --rm  \
   -e MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=true \
   -e MARIADB_RANDOM_ROOT_PASSWORD=true \
   -e MARIADB_DATABASE=kxtest \
-  -v $(pwd)/sql:/docker-entrypoint-initdb.d \
+  -v $(pwd)/../sql:/docker-entrypoint-initdb.d \
   mariadb:10.5

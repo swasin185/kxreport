@@ -75,7 +75,7 @@ public class ReportController {
 	}
 
 	private static void logging(HttpServletRequest request) {
-		logger.info(String.format("%15s", request.getRemoteAddr()) + ":" + request.getRequestURI());
+		logger.info(String.format("%-16s", request.getRemoteAddr()) + request.getRequestURI());
 	}
 
 	private String getJasperFile(Map<String, Object> params) {
