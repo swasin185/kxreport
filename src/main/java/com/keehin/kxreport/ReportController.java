@@ -5,7 +5,9 @@ import java.nio.file.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
+
 import jakarta.servlet.http.*;
+
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
@@ -19,12 +21,12 @@ import org.slf4j.LoggerFactory;
 @CrossOrigin
 @RestController
 public class ReportController {
+	
 	private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
 	private final SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
 	private static final String JASPER = ".jasper";
 	private Database db;
 	private SimpleCsvExporterConfiguration config;
-	private JRCsvExporter exporter;
 
 	public ReportController() {
 		try {
@@ -33,7 +35,6 @@ public class ReportController {
 			Files.createDirectories(Paths.get(Database.getOutputPath()));
 			config = new SimpleCsvExporterConfiguration();
 			config.setFieldDelimiter("\t");
-			exporter = new JRCsvExporter();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -188,6 +189,7 @@ public class ReportController {
 		StreamingResponseBody responseBody = null;
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
+			JRCsvExporter exporter  = new JRCsvExporter();
 			responseBody = outputStream -> {
 				try {
 					exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
@@ -217,6 +219,7 @@ public class ReportController {
 		this.removeEmpty(params);
 		String outputFile = null;
 		String sessId = SessionListener.createHashCode(session);
+		JRCsvExporter exporter  = new JRCsvExporter();
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
 			outputFile = sessId + "/" + params.get(params.get("saveFile") == null ? "report" : "saveFile").toString()

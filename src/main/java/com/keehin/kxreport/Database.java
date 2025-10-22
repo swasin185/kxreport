@@ -10,6 +10,8 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 import org.mariadb.jdbc.MariaDbPoolDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 public class Database {
     private static final String OUTPUT_PATH = "OUTPUT_PATH";

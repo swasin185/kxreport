@@ -70,20 +70,19 @@
                     }
 
                     const data = await response.json()
-                    data.forEach((reportData, index) => {
+                    let index = 0
+                    for (let reportData of data) {
                         const row = tableBody.insertRow()
-                        row.insertCell().textContent = index + 1
+                        row.insertCell().textContent = ++index
                         row.insertCell().textContent = reportData.report // Key from your JSON map
                         row.insertCell().textContent = reportData.name // Key from your JSON map
                         row.insertCell().textContent = reportData.updated // Key from your JSON map
                         row.insertCell().textContent = reportData.size // Key from your JSON map
-                    })
+                    }
                 } catch (error) {
                     console.error("Error fetching report data:", error)
                 }
             }
-
-            // Execute the function when the page loads
             document.addEventListener("DOMContentLoaded", fetchAndRenderReports)
         </script>
     </body>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Saraban"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/sarabun"/>
 	<classpathentry kind="con" path="net.sf.jasperreports.JR_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
