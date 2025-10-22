@@ -18,7 +18,7 @@ public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
-        logger.info("Sess.Created %s", code);
+        logger.info("Sess.Created {}", code);
         File dir = new File(Database.getOutputPath() + code);
 		if (!dir.exists())
 			dir.mkdirs();
@@ -27,7 +27,7 @@ public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
-        logger.info("Sess.Deleted %s", code);
+        logger.info("Sess.Deleted {}", code);
         deleteDirectory(new File(Database.getOutputPath() + code));
     }
 
@@ -44,7 +44,7 @@ public class SessionListener implements HttpSessionListener {
             if (files != null) {
                 for (File file : files) 
                     if (!file.delete()) 
-                        logger.error("Session auto delete %s", file.getName());
+                        logger.error("Session auto delete {}", file.getName());
             }
         }
         return directory.delete();

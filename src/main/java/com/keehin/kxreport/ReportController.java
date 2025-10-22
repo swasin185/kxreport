@@ -80,7 +80,7 @@ public class ReportController {
 	}
 
 	private static void logging(HttpServletRequest request) {
-		logger.info("%-16s%s", request.getRemoteAddr(), request.getRequestURI());
+		logger.info("{}{}", String.format("%-16s", request.getRemoteAddr()), request.getRequestURI());
 	}
 
 	private String getJasperFile(Map<String, Object> params) {
@@ -96,6 +96,7 @@ public class ReportController {
 		Path firstLookDbPath = reportRoot.resolve(dbPath).resolve(jasperFileName);
 		if (Files.exists(firstLookDbPath))
 			return firstLookDbPath.toAbsolutePath().toString();
+			
 		return reportRoot.resolve(jasperFileName).toAbsolutePath().toString();
 	}
 
