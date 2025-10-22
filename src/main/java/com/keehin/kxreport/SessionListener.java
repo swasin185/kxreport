@@ -9,18 +9,16 @@ import jakarta.servlet.http.HttpSessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component
 public class SessionListener implements HttpSessionListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SessionListener.class);
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
-        logger.info("Sess.Created " + code);
+        logger.info("Sess.Created %s", code);
         File dir = new File(Database.getOutputPath() + code);
 		if (!dir.exists())
 			dir.mkdirs();
@@ -29,7 +27,7 @@ public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
-        logger.info("Sess.Deleted " + code);
+        logger.info("Sess.Deleted %s", code);
         deleteDirectory(new File(Database.getOutputPath() + code));
     }
 
@@ -46,7 +44,7 @@ public class SessionListener implements HttpSessionListener {
             if (files != null) {
                 for (File file : files) 
                     if (!file.delete()) 
-                        logger.error("Session auto delete " + file.getName());
+                        logger.error("Session auto delete %s", file.getName());
             }
         }
         return directory.delete();

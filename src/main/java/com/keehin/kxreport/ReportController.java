@@ -5,7 +5,6 @@ import java.nio.file.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
-
 import jakarta.servlet.http.*;
 
 import org.springframework.http.*;
@@ -21,7 +20,7 @@ import org.slf4j.LoggerFactory;
 @CrossOrigin
 @RestController
 public class ReportController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
 	private final SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
 	private static final String JASPER = ".jasper";
@@ -52,7 +51,12 @@ public class ReportController {
 			Statement stmt = conn.createStatement();
 			stmt.execute("drop report temporary table if exists idlist");
 			stmt.execute("create temporary table idlist(id varchar(50))");
-			stmt.execute("insert into idlist values " + idList);
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO idlist VALUES (?)");
+			for (String item : idList.split(",")) {
+				ps.setString(1, item.trim());
+				ps.addBatch();
+			}
+			ps.executeBatch();
 		}
 	}
 
@@ -76,27 +80,23 @@ public class ReportController {
 	}
 
 	private static void logging(HttpServletRequest request) {
-		logger.info(String.format("%-16s", request.getRemoteAddr()) + request.getRequestURI());
+		logger.info("%-16s%s", request.getRemoteAddr(), request.getRequestURI());
 	}
 
 	private String getJasperFile(Map<String, Object> params) {
-		String appName = "";
-		String dbName = "";
-		String jasperFile = (String) params.get("report");
-		if (jasperFile != null) {
-			if (!jasperFile.contains(JASPER))
-				jasperFile += JASPER;
-		} else {
-			jasperFile = "A00" + JASPER;
-		}
-		if (params.get("app") != null)
-			appName = params.get("app").toString() + "/";
-		if (params.get("db") != null)
-			dbName = params.get("db").toString() + "/";
-		File jpFile = new File(Database.getReportPath() + appName + dbName + jasperFile);
-		if (!jpFile.exists())
-			jpFile = new File(Database.getReportPath() + appName + jasperFile);
-		return jpFile.getAbsolutePath();
+		String jasperFileName = ((params.get("report") != null) ? params.get("report").toString() : "A00") + JASPER;
+
+		String appPath = (params.get("app") != null) ? params.get("app").toString() : "";
+		String dbPath = (params.get("db") != null) ? params.get("db").toString() : "";
+
+		Path reportRoot = Paths.get(Database.getReportPath());
+		if (!appPath.equals(""))
+			reportRoot = reportRoot.resolve(appPath);
+
+		Path firstLookDbPath = reportRoot.resolve(dbPath).resolve(jasperFileName);
+		if (Files.exists(firstLookDbPath))
+			return firstLookDbPath.toAbsolutePath().toString();
+		return reportRoot.resolve(jasperFileName).toAbsolutePath().toString();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -189,7 +189,7 @@ public class ReportController {
 		StreamingResponseBody responseBody = null;
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
-			JRCsvExporter exporter  = new JRCsvExporter();
+			JRCsvExporter exporter = new JRCsvExporter();
 			responseBody = outputStream -> {
 				try {
 					exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
@@ -219,7 +219,7 @@ public class ReportController {
 		this.removeEmpty(params);
 		String outputFile = null;
 		String sessId = SessionListener.createHashCode(session);
-		JRCsvExporter exporter  = new JRCsvExporter();
+		JRCsvExporter exporter = new JRCsvExporter();
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
 			outputFile = sessId + "/" + params.get(params.get("saveFile") == null ? "report" : "saveFile").toString()
