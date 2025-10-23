@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 
 import jakarta.servlet.http.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
@@ -28,15 +27,12 @@ import org.slf4j.LoggerFactory;
 @RestController
 public class ReportController {
 
-	@Autowired
-	private ObjectMapper mapper;
-
-	@Autowired
-	private Database db;
-
+	private final Database db = new Database();
+	private final ObjectMapper mapper = new ObjectMapper();
 	private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
-	private static final SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
+	private final SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
 	private static final String JASPER = ".jasper";
+	private static final String LOG = "{}\t{}";
 	private static final SimpleCsvExporterConfiguration config = new SimpleCsvExporterConfiguration();
 
 	@SuppressWarnings("unchecked")
@@ -44,37 +40,30 @@ public class ReportController {
 	public ResponseEntity<Map<String, String>[]> json() {
 		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 		Path reportDir = Paths.get(Database.getReportPath());
-		if (Files.exists(reportDir) && Files.isDirectory(reportDir)) {
-			List<Path> paths = new ArrayList<>();
-			try (Stream<Path> walk = Files.walk(reportDir)) {
-				walk.forEach(paths::add); // collect all paths first
-			} catch (IOException e) {
-				logger.error("Error walking directory: {}", Database.getReportPath(), e);
-			}
-			paths.sort(Comparator.naturalOrder());
-			Map<String, String> reportData = new HashMap<>();
-			for (Path path : paths) {
-				reportData = new HashMap<>();
-				try {
-					JasperReport report = (JasperReport) JRLoader
-							.loadObjectFromFile(path.toAbsolutePath().toString());
-
-					if (report != null) {
-						String fileName = path.getFileName().toString();
-						String nameWithoutExt = fileName.contains(JASPER)
-								? fileName.substring(0, fileName.indexOf(JASPER))
-								: fileName;
-						reportData.put("file", nameWithoutExt);
-						reportData.put("report", report.getName());
-						reportData.put("updated", dtFormat.format(Files.getLastModifiedTime(path).toMillis()));
-						long kilobytes = Files.size(path) >> 10;
-						reportData.put("size", String.valueOf(kilobytes));
-						data.add(reportData);
-					}
-				} catch (Exception e) {
-					reportData.put("file", path.toAbsolutePath().toString());
-					data.add(reportData);
-				}
+		List<Path> paths = new ArrayList<>();
+		try (Stream<Path> walk = Files.walk(reportDir)) {
+			walk.forEach(paths::add);
+		} catch (IOException e) {
+			logger.error("Error walking directory: {}", Database.getReportPath(), e);
+		}
+		paths.sort(Comparator.naturalOrder());
+		Map<String, String> reportData = new HashMap<>();
+		for (Path path : paths) {
+			reportData = new HashMap<>();
+			try {
+				JasperReport report = (JasperReport) JRLoader
+						.loadObjectFromFile(path.toAbsolutePath().toString());
+				String fileName = path.getFileName().toString();
+				String nameWithoutExt = fileName.substring(0, fileName.indexOf(JASPER));
+				reportData.put("file", nameWithoutExt);
+				reportData.put("report", report.getName());
+				reportData.put("updated", dtFormat.format(Files.getLastModifiedTime(path).toMillis()));
+				long kilobytes = Files.size(path) >> 10;
+				reportData.put("size", String.valueOf(kilobytes));
+				data.add(reportData);
+			} catch (Exception e) {
+				reportData.put("file", path.toAbsolutePath().toString());
+				data.add(reportData);
 			}
 		}
 		Map<String, String>[] json = data.toArray(new Map[0]);
@@ -90,7 +79,7 @@ public class ReportController {
 	@PostMapping(value = "/openPDF", produces = "application/pdf")
 	public ResponseEntity<StreamingResponseBody> openPDF(HttpServletRequest request, HttpSession session,
 			@RequestBody Parameter params) {
-		logger.info("{}\t{}", request.getRequestURI(), request.getRemoteAddr());
+		logger.info(LOG, request.getRequestURI(), request.getRemoteAddr());
 		StreamingResponseBody responseBody = null;
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
@@ -113,7 +102,7 @@ public class ReportController {
 
 	@PostMapping(value = "/filePDF", produces = "text/plain")
 	public String filePDF(HttpServletRequest request, HttpSession session, @RequestBody Parameter params) {
-		logger.info("{}\t{}", request.getRequestURI(), request.getRemoteAddr());
+		logger.info(LOG, request.getRequestURI(), request.getRemoteAddr());
 		String outputFile = getOutputFile(params, SessionListener.createHashCode(session)) + ".pdf";
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
@@ -127,7 +116,7 @@ public class ReportController {
 
 	@PostMapping(value = "/fileCSV", produces = "text/plain")
 	public String fileCSV(HttpServletRequest request, HttpSession session, @RequestBody Parameter params) {
-		logger.info("{}\t{}", request.getRequestURI(), request.getRemoteAddr());
+		logger.info(LOG, request.getRequestURI(), request.getRemoteAddr());
 		String outputFile = getOutputFile(params, SessionListener.createHashCode(session)) + ".csv";
 		JRCsvExporter exporter = new JRCsvExporter();
 		try {
@@ -145,7 +134,7 @@ public class ReportController {
 	}
 
 	private void createTempIdList(Connection conn, String idList) throws SQLException {
-		if (conn != null && idList != null && !idList.isEmpty()) {
+		if (conn != null && idList != null) {
 			Statement stmt = conn.createStatement();
 			stmt.execute("drop report temporary table if exists idlist");
 			stmt.execute("create temporary table idlist(id varchar(50))");
@@ -160,9 +149,10 @@ public class ReportController {
 
 	private JasperPrint loadJasperFile(Parameter params) {
 		JasperPrint report = null;
-		Connection conn = db.getConnection((String) params.getDb());
+		Connection conn = db.getConnection(params.getDb());
 		try {
-			this.createTempIdList(conn, (String) params.getIdList());
+			if (params.getIdList() != null)
+				this.createTempIdList(conn, params.getIdList());
 			report = JasperFillManager
 					.fillReport((JasperReport) JRLoader.loadObjectFromFile(getJasperFile(params)),
 							mapper.convertValue(params, new TypeReference<>() {
@@ -170,13 +160,7 @@ public class ReportController {
 							conn);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-		}
+		} 
 		return report;
 	}
 

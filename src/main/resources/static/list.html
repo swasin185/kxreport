@@ -64,14 +64,14 @@
                 tableBody.innerHTML = ""
                 try {
                     const response = await fetch("json")
-                    if (!response.ok) {
+                    if (!response.ok) 
                         throw new Error(`HTTP error! Status: ${response.status}`)
-                    }
+                    
                     const data = await response.json()
                     let index = 0
                     for (let reportData of data) {
                         const row = tableBody.insertRow()
-                        if (reportData.report != undefined) index++
+                        if (reportData.report) index++
                         else index = 0
                         row.insertCell().textContent = index == 0 ? "" : index
                         row.insertCell().textContent = reportData.file // Key from your JSON map

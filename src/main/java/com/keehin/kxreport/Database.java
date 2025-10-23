@@ -46,14 +46,16 @@ public class Database {
 
     private HashMap<String, DataSource> pools = new HashMap<String, DataSource>();
 
-    public Database() throws SQLException {
-        DriverManager.registerDriver(new org.mariadb.jdbc.Driver());
+    public Database() {
+        try {
+            DriverManager.registerDriver(new org.mariadb.jdbc.Driver());
+        } catch (SQLException e) {
+            logger.error("Database Driver", e);
+        }
     }
 
     public Connection getConnection(String db) {
         Connection conn = null;
-        if (db == null)
-            db = "kxtest";
         try {
             if (pools.get(db) != null) {
                 conn = pools.get(db).getConnection();
@@ -61,7 +63,7 @@ public class Database {
                     return conn;
             }
             String dbURI = Database.getJdbcUri() + db + Database.getDbConfig();
-            logger.info("database {}", Database.getJdbcUri() + db);
+            logger.info("connect {}{}", Database.getJdbcUri(), db);
             pools.put(db, new MariaDbPoolDataSource(dbURI));
             conn = pools.get(db).getConnection();
         } catch (SQLException e) {
