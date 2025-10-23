@@ -105,8 +105,7 @@
             return data
         }
         async function callService(service) {
-            let reportWindow = null
-            if (service !== "fileCSV") reportWindow = openWin()
+            let reportWindow = openWin()
             try {
                 const data = getFormDataAsJson()
                 const response = await fetch(service, {
@@ -117,8 +116,10 @@
                 if (!response.ok)
                     throw new Error(`Service call failed with status: ${response.status}`)
 
-                if (service === "filePDF") reportWindow.location.href = await response.text()
-                else if (service === "fileCSV") location.href = await response.text()
+                if (service === "filePDF")
+                    reportWindow.location.href = "." + (await response.text())
+                else if (service === "fileCSV")
+                    reportWindow.location.href = "." + (await response.text())
                 else if (service === "openPDF")
                     reportWindow.location.href = URL.createObjectURL(await response.blob())
             } catch (error) {

@@ -2,15 +2,13 @@
 ```:url
 http://host:8080/kxreport/
 ```
-### GET list
-list report files in HTML format
-### GET json
-list report files in JSON format
-### GET getPDF
-### POST execPDF
-### POST openPDF
-### POST filePDF
-### POST fileCSV
+- /index.html : general report request test pages
+- /list.html : list report files in HTML table format
+- GET /json : list report files in JSON format
+- GET /getPDF : Query params
+- POST /openPDF : Body params
+- POST /filePDF : Body params
+- POST /fileCSV :Body params
 
 ## build command line
 ```:sh

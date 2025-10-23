@@ -1,6 +1,7 @@
 package com.keehin.kxreport;
 
-import java.io.File;
+import java.nio.file.*;
+import java.io.IOException;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpSessionEvent;
@@ -18,35 +19,45 @@ public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
-        logger.info("Sess.Created {}", code);
-        File dir = new File(Database.getOutputPath() + code);
-		if (!dir.exists())
-			dir.mkdirs();
+        String dir = Database.ROOT + se.getSession().getServletContext().getContextPath() + "/" + code;
+        logger.info("Sess.Created {}", dir);
+        Path dirPath = Paths.get(dir);
+        if (!Files.exists(dirPath))
+            try {
+                Files.createDirectories(dirPath); // creates all non-existent parent directories
+            } catch (IOException e) {
+                logger.error("Failed to create directory: {}", dirPath, e);
+            }
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         String code = createHashCode(se.getSession());
-        logger.info("Sess.Deleted {}", code);
-        deleteDirectory(new File(Database.getOutputPath() + code));
+        deleteDirectory(Database.ROOT + se.getSession().getServletContext().getContextPath() + "/" + code);
     }
 
     public static String createHashCode(HttpSession session) {
         return Integer.toHexString(session.getId().hashCode()).toUpperCase();
     }
 
-    public static boolean deleteDirectory(File directory) {
-        if (directory == null || !directory.exists()) {
+    public static boolean deleteDirectory(String dirName) {
+        logger.info("Sess.Deleted {}", dirName);
+        if (dirName == null || dirName.isBlank())
+            return false;
+
+        Path dirPath = Paths.get(dirName);
+        if (!Files.exists(dirPath) || !Files.isDirectory(dirPath))
+            return false;
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath)) {
+            for (Path filePath : stream)
+                Files.deleteIfExists(filePath); // delete file
+            Files.deleteIfExists(dirPath);
+        } catch (IOException e) {
+            logger.error("Error listing directory: {}", dirName, e);
             return false;
         }
-        if (directory.isDirectory()) {
-            File[] files = directory.listFiles();
-            if (files != null) {
-                for (File file : files) 
-                    if (!file.delete()) 
-                        logger.error("Session auto delete {}", file.getName());
-            }
-        }
-        return directory.delete();
+
+        return !Files.exists(dirPath);
     }
 }

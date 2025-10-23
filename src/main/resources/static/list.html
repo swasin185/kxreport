@@ -62,20 +62,20 @@
 
             async function fetchAndRenderReports() {
                 tableBody.innerHTML = ""
-
                 try {
                     const response = await fetch("json")
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`)
                     }
-
                     const data = await response.json()
                     let index = 0
                     for (let reportData of data) {
                         const row = tableBody.insertRow()
-                        row.insertCell().textContent = ++index
+                        if (reportData.report != undefined) index++
+                        else index = 0
+                        row.insertCell().textContent = index == 0 ? "" : index
+                        row.insertCell().textContent = reportData.file // Key from your JSON map
                         row.insertCell().textContent = reportData.report // Key from your JSON map
-                        row.insertCell().textContent = reportData.name // Key from your JSON map
                         row.insertCell().textContent = reportData.updated // Key from your JSON map
                         row.insertCell().textContent = reportData.size // Key from your JSON map
                     }
