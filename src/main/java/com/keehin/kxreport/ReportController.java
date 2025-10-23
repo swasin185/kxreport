@@ -70,7 +70,7 @@ public class ReportController {
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(json);
 	}
 
-	@GetMapping(value = "/getPDF", produces = "text/html; charset=UTF-8")
+	@GetMapping(value = "/getPDF", produces = "application/pdf")
 	public ResponseEntity<StreamingResponseBody> getPDF(HttpServletRequest request, HttpSession session,
 			@RequestParam Map<String, Object> params) {
 		return this.openPDF(request, session, mapper.convertValue(params, Parameter.class));
