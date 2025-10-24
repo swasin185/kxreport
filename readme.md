@@ -4,7 +4,7 @@
 
 ## 📘 Introduction
 
-**KXReport** is a Spring Boot application designed as a dedicated **Report Generator Service** for the local **KEEHIN Application**. It specializes in generating dynamic reports using **JasperReports7** and exposes this functionality via **RESTful API endpoints**.
+**KXReport** is a Spring Boot application designed as a dedicated **Report Generator Service** for the local **KEEHIN Application**. It specializes in generating dynamic reports using **JasperReports 7** and exposes this functionality via **RESTful API endpoints**.
 
 ---
 
@@ -58,7 +58,7 @@ See detail of report folder from list.html<br>
 
 ### install.sh
 
-Software requirement on Server<br>
+Software requirement on Server
 
 ```bash
 #!/bin/bash
@@ -109,10 +109,10 @@ echo "Start ${TOMCAT} service... [PRESS Q TO CLOSE]"
 sudo systemctl status ${TOMCAT}
 ```
 
-## Jasper Files Folder
+## Jasper Files Folder in /khgroup/report
 
 You should save Jasper Report Sources (\*.jrxml) in your report project.
-Just copy compiled version (\*.jasper) to this folder
+Just copy compiled version (\*.jasper) to this folder.
 
 ```bash
 cp -ur "${YOUR_PROJECT}/report/*/" /khgroup/report
@@ -120,6 +120,10 @@ find "${YOUR_PROJECT}" -type f -name "*.jasper" -exec cp -t /khgroup/report {}
 ```
 
 ### Folder Structure
+
+You should put \*.jasper file under ./report/
+root of folder mean default app is ""
+and support all database if not exists any report in sub database folder
 
 ```
 /khgroup/report/
@@ -146,7 +150,7 @@ Community Edition is recommended for developing and editing .jrxml templates.
 https://community.jaspersoft.com/download-jaspersoft/community-edition
 ```
 
-Font Configuration: Ensure THSarabun fonts are configured:
+Font Configuration: Ensure THSarabun fonts are configured (Thai Language):
 
 -   add THSarabun fonts in ./fonts/
 -   OR add classpath to ./src/main/webapps/WEB-INF/lib/jasperreports-fonts.jar
@@ -162,10 +166,11 @@ mvn package
 sudo cp ./target/kxreport.war /var/lib/tomcat10/webapps
 ```
 
-## Docker Scripts
+## Docker Script
 
-If you prefer to use docker for evaluation or testing See. ./docker/\*.sh
-in docker environment use the latest version of Java, Tomcat, MariaDB
+If you prefer to use docker for evaluation or testing See ./docker/\*.sh
+Docker environment use the newer version of Java, Tomcat, MariaDB
+Update on late 2025 it support by Java v25, Tomcat v11, MariaDB v12
 
 ### docker.sh
 
