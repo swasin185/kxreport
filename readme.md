@@ -125,19 +125,19 @@ You should put \*.jasper file under ./report/
 root of folder mean default app is ""
 and support all database if not exists any report in sub database folder
 
-```
+```text
 /khgroup/report/
-├── app/
-│   ├── database/
-│   │   └── \*.jasper
-│   └── database/
-│       └── \*.jasper
-├── app/
-│   ├── database/
-│   │   └── \*.jasper
-│   └── database/
-│       └── \*.jasper
-└── \*.jasper
+├── app1/
+│   ├── database1/
+│   │   └── *.jasper
+│   └── database2/
+│       └── *.jasper
+├── app2/
+│   ├── database1/
+│   │   └── *.jasper
+│   └── database2/
+│       └── *.jasper
+└── *.jasper
 ```
 
 ## For Developer
