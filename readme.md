@@ -127,17 +127,17 @@ and support all database if not exists any report in sub database folder
 
 ```text
 /khgroup/report/
-├── app1/
-│   ├── database1/
-│   │   └── *.jasper
-│   └── database2/
-│       └── *.jasper
-├── app2/
-│   ├── database1/
-│   │   └── *.jasper
-│   └── database2/
-│       └── *.jasper
-└── *.jasper
+|── app1/
+|   |── database1/
+|   |   └── *.jasper
+|   |── database2/
+|       └── *.jasper
+|── app2/
+|   |── database1/
+|   |   └── *.jasper
+|   |── database2/
+|       └── *.jasper
+|── *.jasper
 ```
 
 ## For Developer
