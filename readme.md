@@ -1,11 +1,10 @@
-# 🧾 KXReport
+# 🧾 KxReport
 
 ![Alt Text](./src/main/resources/static/img/tesseract.gif)
 
 ## 📘 Introduction
 
-**KXReport** is a Spring Boot application designed as a dedicated **Report Generator Service** for the local **KEEHIN Application**.  
-It specializes in generating dynamic reports using **JasperReports7** and exposes this functionality via **RESTful API endpoints**.
+**KXReport** is a Spring Boot application designed as a dedicated **Report Generator Service** for the local **KEEHIN Application**. It specializes in generating dynamic reports using **JasperReports7** and exposes this functionality via **RESTful API endpoints**.
 
 ---
 
@@ -37,11 +36,11 @@ The application is deployed as a WAR file (`kxreport.war`) and accessible at the
 http://host:8080/kxreport
 ```
 
-See all **parameters** and request demo from index.html
-![Alt Text](./screenshot/scr01.png)
-![Alt Text](./screenshot/scr02.png)
-See detail of report folder from list.html
-![Alt Text](./screenshot/scr03.png)
+See all **parameters** and request demo from index.html<br>
+![Alt Text](./screenshot/scr01.png)<br>
+![Alt Text](./screenshot/scr02.png)<br>
+See detail of report folder from list.html<br>
+![Alt Text](./screenshot/scr03.png)<br>
 
 ## ⚙️ API Endpoints
 
@@ -59,7 +58,7 @@ See detail of report folder from list.html
 
 ### install.sh
 
-Software requirement on Server
+Software requirement on Server<br>
 
 ```bash
 #!/bin/bash
@@ -113,10 +112,11 @@ sudo systemctl status ${TOMCAT}
 ## Jasper Files Folder
 
 You should save Jasper Report Sources (\*.jrxml) in your report project.
-Just deploy compiled version (\*.jasper) to this folder
+Just copy compiled version (\*.jasper) to this folder
 
 ```bash
-cp -ur *.jasper /khgroup/report
+cp -ur "${YOUR_PROJECT}/report/*/" /khgroup/report
+find "${YOUR_PROJECT}" -type f -name "*.jasper" -exec cp -t /khgroup/report {}
 ```
 
 ### Folder Structure
