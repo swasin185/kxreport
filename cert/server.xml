@@ -1,18 +1,32 @@
-<Executor name="kxreportThreadPool" 
-          namePrefix="kx-exec-"
-          maxThreads="50" 
-          minSpareThreads="5"
-          maxQueueSize="100"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="-1" shutdown="SHUTDOWN">
+    <Service name="Catalina">
+        <Executor name="threadPool" 
+            namePrefix="kx-exec-"
+            maxThreads="50" 
+            minSpareThreads="5"
+            maxQueueSize="100"/>
 
-<Connector port="8443" 
-           protocol="org.apache.coyote.http11.Http11NioProtocol"
-           SSLEnabled="true" 
-           scheme="https" 
-           secure="true"
-           executer="kxreportThreadPool">
-           <SSLHostConfig>
-           <Certificate certificateFile="/etc/tomcat10/cert.pem"
-                        certificateKeyFile="/etc/tomcat10/key.pem"
-                        type="RSA" />
-           </SSLHostConfig>
-</Connector>
+        <Connector port="8080"
+            redirectPort="8443" 
+            executer="threadPool" />
+        
+        <Connector port="8443" 
+            protocol="org.apache.coyote.http11.Http11NioProtocol"
+            SSLEnabled="true" 
+            scheme="https" 
+            secure="true"
+            executer="threadPool">
+            <SSLHostConfig>
+                <Certificate type="RSA"
+                    certificateFile="/etc/cert/cert.pem"
+                    certificateKeyFile="/etc/cert/key.pem" />
+            </SSLHostConfig>
+        </Connector>
+        
+        <Engine name="Catalina" defaultHost="localhost">
+            <Host name="localhost" appBase="webapps" 
+                unpackWARs="true" autoDeploy="true" />
+        </Engine>
+  </Service>
+</Server>

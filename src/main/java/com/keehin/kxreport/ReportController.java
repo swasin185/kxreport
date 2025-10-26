@@ -97,7 +97,7 @@ public class ReportController {
 			return ResponseEntity.ok()
 					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"report.pdf\"")
 					.contentType(MediaType.APPLICATION_PDF)
-					.body(stream);`
+					.body(stream);
 
 		} catch (Exception e) {
 			logger.error("Failed to generate report", e);
