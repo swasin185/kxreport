@@ -34,6 +34,7 @@ The application is deployed as a WAR file (`kxreport.war`) and accessible at the
 
 ```url
 http://host:8080/kxreport
+https://host:8443/kxreport
 ```
 
 See all **parameters** and request demo from index.html<br>
@@ -150,7 +151,7 @@ Community Edition is recommended for developing and editing .jrxml templates.
 https://community.jaspersoft.com/download-jaspersoft/community-edition
 ```
 
-Font Configuration: Ensure THSarabun fonts are configured (Thai Language):
+Font Configuration: Ensure THSarabun font are configured (Thai Language):
 
 -   add THSarabun fonts in ./fonts/
 -   OR add classpath to ./src/main/webapps/WEB-INF/lib/jasperreports-fonts.jar
@@ -168,8 +169,8 @@ sudo cp ./target/kxreport.war /var/lib/tomcat10/webapps
 
 ## Docker Script
 
-If you prefer to use docker for evaluation or testing See ./docker/\*.sh
-Docker environment use the newer version of Java, Tomcat, MariaDB
+If you prefer to use docker for evaluation or testing See ./docker/\*.sh. 
+Docker environment use the newer version of Java, Tomcat, MariaDB. 
 Update on late 2025 it support by Java v25, Tomcat v11, MariaDB v12
 
 ### docker.sh
