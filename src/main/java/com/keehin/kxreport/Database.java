@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class Database {
 
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
-    
+
     private static final Properties prop = new Properties();
 
     public static final String ROOT = "webapps";
@@ -54,21 +54,18 @@ public class Database {
         }
     }
 
-    public Connection getConnection(String db) {
+    public Connection getConnection(String db) throws SQLException {
         Connection conn = null;
-        try {
-            if (pools.get(db) != null) {
-                conn = pools.get(db).getConnection();
-                if (conn != null)
-                    return conn;
-            }
-            String dbURI = Database.getJdbcUri() + db + Database.getDbConfig();
-            logger.info("connect {}{}", Database.getJdbcUri(), db);
-            pools.put(db, new MariaDbPoolDataSource(dbURI));
+        if (pools.get(db) != null) {
             conn = pools.get(db).getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            if (conn != null)
+                return conn;
         }
+        String dbURI = Database.getJdbcUri() + db + Database.getDbConfig();
+        logger.info("connect {}{}", Database.getJdbcUri(), db);
+        pools.put(db, new MariaDbPoolDataSource(dbURI));
+        conn = pools.get(db).getConnection();
+
         return conn;
     }
 }

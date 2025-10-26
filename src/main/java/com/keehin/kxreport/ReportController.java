@@ -77,27 +77,32 @@ public class ReportController {
 	}
 
 	@PostMapping(value = "/openPDF", produces = "application/pdf")
-	public ResponseEntity<StreamingResponseBody> openPDF(HttpServletRequest request, HttpSession session,
+	public ResponseEntity<StreamingResponseBody> openPDF(
+			HttpServletRequest request,
+			HttpSession session,
 			@RequestBody Parameter params) {
-		logger.info(LOG, request.getRequestURI(), request.getRemoteAddr());
-		StreamingResponseBody responseBody = null;
+
+		logger.info("{}\t{}", request.getRequestURI(), request.getRemoteAddr());
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
-			responseBody = outputStream -> {
+
+			StreamingResponseBody stream = outputStream -> {
 				try {
 					JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+					outputStream.flush(); // 🔹 VERY IMPORTANT
 				} catch (Exception e) {
-					logger.error(e.getMessage());
+					logger.error("Error streaming PDF", e);
 				}
 			};
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"report.pdf\"")
+					.contentType(MediaType.APPLICATION_PDF)
+					.body(stream);`
+
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to generate report", e);
+			return ResponseEntity.internalServerError().build();
 		}
-		if (responseBody == null)
-			return ResponseEntity.notFound().build();
-		else
-			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "inline;")
-					.contentType(MediaType.APPLICATION_PDF).body(responseBody);
 	}
 
 	@PostMapping(value = "/filePDF", produces = "text/plain")
@@ -147,20 +152,16 @@ public class ReportController {
 		}
 	}
 
-	private JasperPrint loadJasperFile(Parameter params) {
+	private JasperPrint loadJasperFile(Parameter params) throws Exception {
 		JasperPrint report = null;
 		Connection conn = db.getConnection(params.getDb());
-		try {
-			if (params.getIdList() != null)
-				this.createTempIdList(conn, params.getIdList());
-			report = JasperFillManager
-					.fillReport((JasperReport) JRLoader.loadObjectFromFile(getJasperFile(params)),
-							mapper.convertValue(params, new TypeReference<>() {
-							}),
-							conn);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
+		if (params.getIdList() != null)
+			this.createTempIdList(conn, params.getIdList());
+		report = JasperFillManager
+				.fillReport((JasperReport) JRLoader.loadObjectFromFile(getJasperFile(params)),
+						mapper.convertValue(params, new TypeReference<>() {
+						}),
+						conn);
 		return report;
 	}
 

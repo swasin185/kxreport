@@ -236,9 +236,5 @@ order by table_type, table_name]]></query>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</band>
 	</detail>
-	<summary height="96">
-		<element kind="image" uuid="373b3c74-62ec-4c19-a5c2-6ef85fc77be1" x="180" y="0" width="200" height="60">
-			<expression><![CDATA["http://localhost:8080/kxreport/img/khlogo-xs.png"]]></expression>
-		</element>
-	</summary>
+	<summary height="96"/>
 </jasperReport>

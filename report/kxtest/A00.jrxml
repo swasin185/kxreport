@@ -276,9 +276,6 @@ ORDER BY information_schema.`TABLES`.`TABLE_TYPE` DESC,
 		</band>
 	</detail>
 	<summary height="429" splitType="Stretch">
-		<element kind="image" uuid="373b3c74-62ec-4c19-a5c2-6ef85fc77be1" x="180" y="0" width="200" height="60">
-			<expression><![CDATA["http://localhost:8080/kxreport/img/khlogo-xs.png"]]></expression>
-		</element>
 		<element kind="chart" chartType="pie3D" uuid="8ec268a4-645c-4bb9-ae97-3bb3df21bdb3" stretchType="ContainerHeight" x="57" y="60" width="440" height="369" evaluationTime="Report">
 			<dataset kind="pie">
 				<series>
