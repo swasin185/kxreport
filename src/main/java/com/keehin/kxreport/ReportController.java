@@ -89,7 +89,7 @@ public class ReportController {
 			StreamingResponseBody stream = outputStream -> {
 				try {
 					JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-					outputStream.flush(); // 🔹 VERY IMPORTANT
+					outputStream.flush();
 				} catch (Exception e) {
 					logger.error("Error streaming PDF", e);
 				}
