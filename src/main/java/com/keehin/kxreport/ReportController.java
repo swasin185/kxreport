@@ -82,7 +82,7 @@ public class ReportController {
 			HttpSession session,
 			@RequestBody Parameter params) {
 
-		logger.info("{}\t{}", request.getRequestURI(), request.getRemoteAddr());
+		logger.info(LOG, request.getRequestURI(), request.getRemoteAddr());
 		try {
 			JasperPrint jasperPrint = loadJasperFile(params);
 
@@ -114,7 +114,7 @@ public class ReportController {
 			JasperExportManager.exportReportToPdfStream(jasperPrint,
 					new FileOutputStream(Database.ROOT + request.getContextPath() + outputFile));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("filePDF", e);
 		}
 		return outputFile;
 	}
@@ -133,7 +133,7 @@ public class ReportController {
 			exporter.setConfiguration(config);
 			exporter.exportReport();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("fileCSV", e);
 		}
 		return outputFile;
 	}
@@ -152,7 +152,7 @@ public class ReportController {
 		}
 	}
 
-	private JasperPrint loadJasperFile(Parameter params) throws Exception {
+	private JasperPrint loadJasperFile(Parameter params) throws SQLException, JRException {
 		JasperPrint report = null;
 		Connection conn = db.getConnection(params.getDb());
 		if (params.getIdList() != null)

@@ -28,7 +28,7 @@ public class Database {
                 .getResourceAsStream("application.properties")) {
             prop.load(input);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("application.properties", e);
         }
     }
 
