@@ -95,7 +95,7 @@ public class ReportController {
 				}
 			};
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"report.pdf\"")
+					.header(HttpHeaders.CONTENT_DISPOSITION, "inline;")
 					.contentType(MediaType.APPLICATION_PDF)
 					.body(stream);
 
