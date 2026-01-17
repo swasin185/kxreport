@@ -19,8 +19,8 @@
             executer="threadPool">
             <SSLHostConfig>
                 <Certificate type="RSA"
-                    certificateFile="/etc/cert/cert.pem"
-                    certificateKeyFile="/etc/cert/key.pem" />
+                    certificateFile="/etc/ssl/certs/cert.pem"
+                    certificateKeyFile="/etc/ssl/private/key.pem" />
             </SSLHostConfig>
         </Connector>
         

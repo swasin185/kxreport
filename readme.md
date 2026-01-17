@@ -21,7 +21,6 @@
 | Developer    | Version |
 | ------------ | ------- |
 | Java JDK     | >= 17   |
-| VSCode       | 1.105.1 |
 | Git, Github  | 2.39.5  |
 | Maven        | 3.8.7   |
 | JasperReport | 7.x     |
@@ -34,7 +33,7 @@ The application is deployed as a WAR file (`kxreport.war`) and accessible at the
 
 ```url
 http://host:8080/kxreport
-https://host:8443/kxreport
+http://host:8080/kxreport/list.html
 ```
 
 See all **parameters** and request demo from index.html<br>
@@ -57,19 +56,24 @@ See detail of report folder from list.html<br>
 
 ## 🛠️ Installation
 
-### install.sh
+### Clone repository
+
+```bash
+git clone https://github.com/swasin185/kxreport
+cd kxreport
+```
+
+### ./script/install.sh
 
 Software requirement on Server
 
 ```bash
 #!/bin/bash
 apt install default-jdk-headless git maven mariadb-server tomcat10
-git clone https://github.com/swasin185/kxreport
-cd kxreport
 mysql < ./sql/init-db.sql
 ```
 
-### build.sh
+### ./script/build.sh
 
 First time build all kxreport then update library and make report folder
 
@@ -80,7 +84,7 @@ TOMCAT="tomcat10"
 REPORT_DIR="/khgroup/report"
 TOMCAT_LIB_DIR="/var/lib/${TOMCAT}/lib"
 TOMCAT_WEBAPPS_DIR="/var/lib/${TOMCAT}/webapps"
-TARGET_DIR="./target" 
+TARGET_DIR="./target"
 JASPER_SRC_DIR="${TARGET_DIR}/jasper"
 KXREPORT_LIB_SRC_DIR="${TARGET_DIR}/kxreport/WEB-INF/lib"
 WAR_SRC_PATH="${TARGET_DIR}/kxreport.war"
@@ -118,6 +122,8 @@ sudo systemctl status ${TOMCAT}
 
 You should save Jasper Report Sources (\*.jrxml) in your report project.
 Just copy compiled version (\*.jasper) to this folder.
+
+> make symbolic link in kxreport/report/app to your report project
 
 ```bash
 cp -ur "${YOUR_PROJECT}/report/*/" /khgroup/report
@@ -157,8 +163,8 @@ https://community.jaspersoft.com/download-jaspersoft/community-edition
 
 Font Configuration: Ensure THSarabun font are configured (Thai Language):
 
--   add THSarabun fonts in ./fonts/
--   OR add classpath to ./src/main/webapps/WEB-INF/lib/jasperreports-fonts.jar
+- add THSarabun fonts in ./fonts/
+- OR add classpath to ./src/main/webapps/WEB-INF/lib/jasperreports-fonts.jar
 
 ### deploy.sh
 
@@ -173,8 +179,8 @@ sudo cp ./target/kxreport.war /var/lib/tomcat10/webapps
 
 ## Docker Script
 
-If you prefer to use docker for evaluation or testing See ./docker/\*.sh. 
-Docker environment use the newer version of Java, Tomcat, MariaDB. 
+Docker for evaluation or testing See ./docker/\*.sh.
+Docker environment use the newer version of Java, Tomcat, MariaDB.
 Update on late 2025 it support by Java v25, Tomcat v11, MariaDB v12
 
 ### docker.sh
@@ -188,4 +194,23 @@ docker pull tomcat:11-jre25
 ./docker-mvn.sh
 ./docker-mariadb.sh
 ./docker-tomcat.sh
+```
+
+## SSL host using Nginx
+
+- Set Nginx to SSL 8443 reverse proxy to Tomcat http://localhost:8080/kxreport
+  Nginx configuration file is in ./nginx/kxreport.conf
+
+- Generate SSL certificate from ./cert/genkey.sh
+
+```bash
+sudo apt install nginx
+
+cd ./cert
+./genkey.sh
+
+# Setup Nginx
+sudo cp ./nginx/kxreport.conf /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/kxreport.conf /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
 ```
