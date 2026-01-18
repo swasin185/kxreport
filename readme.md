@@ -179,7 +179,7 @@ sudo cp ./target/kxreport.war /var/lib/tomcat10/webapps
 
 ## Docker Script
 
-Docker for evaluation or testing See ./docker/\*.sh.
+Docker for evaluation or testing See ./script/docker/\*.sh.
 Docker environment use the newer version of Java, Tomcat, MariaDB.
 Update on late 2025 it support by Java v25, Tomcat v11, MariaDB v12
 
@@ -199,18 +199,19 @@ docker pull tomcat:11-jre25
 ## SSL host using Nginx
 
 - Set Nginx to SSL 8443 reverse proxy to Tomcat http://localhost:8080/kxreport
-  Nginx configuration file is in ./nginx/kxreport.conf
+  Nginx configuration file is in ./script/nginx/kxreport.conf
 
-- Generate SSL certificate from ./cert/genkey.sh
+- Generate SSL certificate from ./script/cert/genkey.sh
 
 ```bash
+cd ./script/cert
+./genkey.sh
+cd ../..
+
 sudo apt install nginx
 
-cd ./cert
-./genkey.sh
-
 # Setup Nginx
-sudo cp ./nginx/kxreport.conf /etc/nginx/sites-available/
+sudo cp ./script/nginx/kxreport.conf /etc/nginx/sites-available/
 sudo ln -s /etc/nginx/sites-available/kxreport.conf /etc/nginx/sites-enabled/
 sudo systemctl restart nginx
 ```
