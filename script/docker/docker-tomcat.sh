@@ -3,7 +3,6 @@
 docker run -d --rm \
   --name tomcat \
   --network "host" \
-  -p 8888:8080 \
   -v $(pwd)/../../target:/usr/local/tomcat/webapps \
   -v $(pwd)/../../target/jasper:/khgroup/report \
   -v $(pwd)/../cert/cert.pem:/etc/ssl/certs/cert.pem:ro \
