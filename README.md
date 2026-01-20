@@ -126,9 +126,12 @@ Just copy compiled version (\*.jasper) to this folder.
 > make symbolic link in kxreport/report/app to your report project
 
 ```bash
+ln -s "${YOUR_PROJECT}/report" ./report/app
 cp -ur "${YOUR_PROJECT}/report/*/" /khgroup/report
 find "${YOUR_PROJECT}/report" -type f -name "*.jasper" -exec cp -ur -t /khgroup/report {} +
 ```
+
+---
 
 ### Folder Structure
 
@@ -150,6 +153,8 @@ and support all database if not exists any report in sub database folder
 |       └── *.jasper
 |── *.jasper
 ```
+
+---
 
 ## For Developer
 
@@ -196,10 +201,14 @@ docker pull tomcat:11-jre25
 ./docker-tomcat.sh
 ```
 
-## SSL host using Nginx
+---
 
-- Set Nginx to SSL 8443 reverse proxy to Tomcat http://localhost:8080/kxreport
-  Nginx configuration file is in ./script/nginx/kxreport.conf
+## SSL Host Service
+
+```url
+https://host:8443/kxreport
+https://host:8443/kxreport/list.html
+```
 
 - Generate SSL certificate from ./script/cert/genkey.sh
 
@@ -207,11 +216,35 @@ docker pull tomcat:11-jre25
 cd ./script/cert
 ./genkey.sh
 cd ../..
+```
 
+- You can should 2 ways to setup SSL Nginx or TomcatSSL
+
+### Nginx (Reverse Proxy)
+
+- Set Nginx to SSL 8443 reverse proxy to Tomcat http://localhost:8080/kxreport
+  Nginx configuration file is in ./script/nginx/kxreport.conf
+
+```bash
 sudo apt install nginx
 
 # Setup Nginx
 sudo cp ./script/nginx/kxreport.conf /etc/nginx/sites-available/
 sudo ln -s /etc/nginx/sites-available/kxreport.conf /etc/nginx/sites-enabled/
 sudo systemctl restart nginx
+
+# Block all external traffic to your backend ports
+sudo ufw deny 8080/tcp
+sudo ufw deny 3000/tcp
+
+# Ensure only the NGINX port is open to the world
+sudo ufw allow 8443/tcp
+```
+
+### Tomcat (SSL)
+
+```bash
+TOMCAT="tomcat10"
+TOMCAT_LIB_DIR="/var/lib/${TOMCAT}/conf"
+sudo cp ./script/cert/server.xml "${TOMCAT_LIB_DIR}/server.xml"
 ```
