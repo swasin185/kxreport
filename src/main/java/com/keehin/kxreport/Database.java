@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 import org.mariadb.jdbc.MariaDbPoolDataSource;
@@ -44,7 +44,7 @@ public class Database {
         return prop.getProperty("DB_CONFIG");
     }
 
-    private HashMap<String, DataSource> pools = new HashMap<String, DataSource>();
+    private ConcurrentHashMap<String, DataSource> pools = new ConcurrentHashMap<String, DataSource>();
 
     public Database() {
         try {
@@ -65,7 +65,6 @@ public class Database {
         logger.info("connect {}{}", Database.getJdbcUri(), db);
         pools.put(db, new MariaDbPoolDataSource(dbURI));
         conn = pools.get(db).getConnection();
-
         return conn;
     }
 }
