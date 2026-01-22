@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 @RestController
 public class ReportController {
 
-	private final Database db = new Database();
+	private final Database db;
 	private final ObjectMapper mapper = new ObjectMapper();
 	private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
 	private final SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yy [HH:mm:ss]", Locale.US);
@@ -35,16 +35,21 @@ public class ReportController {
 	private static final String LOG = "{}\t{}";
 	private static final SimpleCsvExporterConfiguration config = new SimpleCsvExporterConfiguration();
 
-	@SuppressWarnings("unchecked")
+	// Constructor injection for Database bean
+	public ReportController(Database db) {
+		this.db = db;
+	}
+
+	@SuppressWarnings({ "unchecked", "null" })
 	@GetMapping(value = "/json", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<Map<String, String>[]> json() {
 		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-		Path reportDir = Paths.get(Database.getReportPath());
+		Path reportDir = Paths.get(db.getReportPath());
 		List<Path> paths = new ArrayList<>();
 		try (Stream<Path> walk = Files.walk(reportDir)) {
 			walk.forEach(paths::add);
 		} catch (IOException e) {
-			logger.error("Error walking directory: {}", Database.getReportPath(), e);
+			logger.error("Error walking directory: {}", db.getReportPath(), e);
 		}
 		paths.sort(Comparator.naturalOrder());
 		Map<String, String> reportData = new HashMap<>();
@@ -76,6 +81,7 @@ public class ReportController {
 		return this.openPDF(request, session, mapper.convertValue(params, Parameter.class));
 	}
 
+	@SuppressWarnings("null")
 	@PostMapping(value = "/openPDF", produces = "application/pdf")
 	public ResponseEntity<StreamingResponseBody> openPDF(
 			HttpServletRequest request,
@@ -171,7 +177,7 @@ public class ReportController {
 		String appPath = (params.getApp() != null) ? params.getApp() : "";
 		String dbPath = (params.getDb() != null) ? params.getDb() : "";
 
-		Path reportRoot = Paths.get(Database.getReportPath());
+		Path reportRoot = Paths.get(db.getReportPath());
 		if (!appPath.equals(""))
 			reportRoot = reportRoot.resolve(appPath);
 
