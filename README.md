@@ -252,25 +252,19 @@ sudo cp ./script/cert/server.xml "${TOMCAT_LIB_DIR}/server.xml"
 ## application.properties
 
 if you want to modify database connection user/password or report folder you can
-edit ./src/main/resources/application.properties and run ./script/build.sh
+edit ./src/main/resources/application.properties
 
 ```bash
-logging.level.root=INFO
-logging.file.name=/var/lib/tomcat10/logs/kxreport.log
-logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} %-5level %msg%n
+logging.level.root = INFO
+logging.file.name = /var/lib/tomcat10/logs/kxreport.log
+logging.pattern.file = %d{yyyy-MM-dd HH:mm:ss} %-5level %msg%n
 kxreport.report.path = /khgroup/report/
 kxreport.db.uri = jdbc:mariadb://localhost:3306/
 kxreport.db.config = ?user=kxreport&password=kxreport&minPoolSize=0&maxPoolSize=50&maxIdleTime=60
 kxreport.db.config.ssl = ?user=kxreport&password=kxreport&minPoolSize=0&maxPoolSize=50&maxIdleTime=60&useSSL=true&requireSSL=false
 ```
 
-another way is edit /var/lib/tomcat10/conf/context.xml point to global application.properties
+- rebuild with ./script/build.sh
+- OR put the modified application.properties in /var/lib/tomcat10/
 
-```bash
-<?xml version="1.0" encoding="UTF-8"?>
-<Context>
-  <Parameter name="spring.config.location"
-             value="file:/var/lib/tomcat10/application.properties"
-             override="false"/>
-</Context>
-```
+---
