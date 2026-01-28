@@ -53,10 +53,10 @@
                         <input type="number" name="comCode" id="comCode" value="1" />
                         <label for="comName">Company Name</label>
                         <input type="text" name="comName" id="comName" value="Company Name" />
-                        <label for="fromDate">From Date</label>
-                        <input type="date" name="fromDate" id="fromDate" />
-                        <label for="toDate">To Date</label>
-                        <input type="date" name="toDate" id="toDate" />
+                        <label for="startDate">Start Date</label>
+                        <input type="date" name="startDate" id="startDate" />
+                        <label for="endDate">End Date</label>
+                        <input type="date" name="endDate" id="endDate" />
                         <label for="fromId">From ID</label>
                         <input type="text" name="fromId" id="fromId" value="000000" />
                         <label for="toId">To ID</label>
@@ -87,8 +87,8 @@
         function initDates() {
             const today = new Date().toISOString().substring(0, 10)
             const yearStart = today.substring(0, 4) + "-01-01"
-            document.getElementsByName("toDate")[0].value = today
-            document.getElementsByName("fromDate")[0].value = yearStart
+            document.getElementsByName("endDate")[0].value = today
+            document.getElementsByName("startDate")[0].value = yearStart
         }
         initDates()
         function openWin(url = "report.html") {

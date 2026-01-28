@@ -10,8 +10,8 @@
 	<parameter name="app" class="java.lang.String"/>
 	<parameter name="db" class="java.lang.String"/>
 	<parameter name="comCode" class="java.lang.String"/>
-	<parameter name="fromDate" class="java.lang.String"/>
-	<parameter name="toDate" class="java.lang.String"/>
+	<parameter name="startDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String"/>
 	<parameter name="comName" class="java.lang.String"/>
 	<parameter name="fromId" class="java.lang.String"/>
 	<parameter name="toId" class="java.lang.String"/>
@@ -23,10 +23,10 @@
 	</parameter>
 	<parameter name="idList" class="java.lang.String"/>
 	<parameter name="dateFrom" evaluationTime="Late" class="java.util.Date">
-		<defaultValueExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{fromDate})]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{startDate})]]></defaultValueExpression>
 	</parameter>
 	<parameter name="dateTo" evaluationTime="Late" class="java.util.Date">
-		<defaultValueExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{toDate})]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{endDate})]]></defaultValueExpression>
 	</parameter>
 	<query language="sql"><![CDATA[select table_type, table_name, table_comment
 from information_schema.tables
@@ -162,13 +162,13 @@ order by table_type, table_name]]></query>
 			<box leftPadding="0" rightPadding="0"/>
 		</element>
 		<element kind="staticText" uuid="f02c779b-fdf1-4714-a2ac-8fcf68fb2376" x="180" y="40" width="60" height="20" fontName="TH SarabunPSK" fontSize="16.0" bold="false">
-			<text><![CDATA[fromDate:]]></text>
+			<text><![CDATA[startDate:]]></text>
 			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<box leftPadding="0" rightPadding="0"/>
 		</element>
 		<element kind="staticText" uuid="d0956c0d-8b09-4359-8106-5d66f2c5af99" x="180" y="60" width="60" height="20" fontName="TH SarabunPSK" fontSize="16.0" bold="false">
-			<text><![CDATA[toDate:]]></text>
+			<text><![CDATA[endDate:]]></text>
 			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<box leftPadding="0" rightPadding="0"/>

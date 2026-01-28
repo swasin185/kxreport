@@ -6,8 +6,8 @@ public class Parameter {
     private String report;
     private String comCode;
     private String comName;
-    private String fromDate;
-    private String toDate;
+    private String startDate;
+    private String endDate;
     private String fromId;
     private String toId;
     private String option;
@@ -54,20 +54,20 @@ public class Parameter {
         this.comName = blankToNull(comName);
     }
 
-    public String getFromDate() {
-        return fromDate;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setFromDate(String fromDate) {
-        this.fromDate = blankToNull(fromDate);
+    public void setStartDate(String startDate) {
+        this.startDate = blankToNull(startDate);
     }
 
-    public String getToDate() {
-        return toDate;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setToDate(String toDate) {
-        this.toDate = blankToNull(toDate);
+    public void setEndDate(String endDate) {
+        this.endDate = blankToNull(endDate);
     }
 
     public String getFromId() {
