@@ -117,11 +117,11 @@ ORDER BY information_schema.`TABLES`.`TABLE_TYPE` DESC,
 			<expression><![CDATA[$P{fromId}]]></expression>
 			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
-		<element kind="textField" uuid="b694f1ba-fad6-4c40-97ca-fe556a63db21" x="240" y="60" width="100" height="20" fontName="TH SarabunPSK" fontSize="17.0" pattern="MMM d, yyyy" blankWhenNull="true">
+		<element kind="textField" uuid="b694f1ba-fad6-4c40-97ca-fe556a63db21" x="240" y="60" width="100" height="20" fontName="Sarabun" fontSize="14.0" pattern="MMM d, yyyy" blankWhenNull="true">
 			<expression><![CDATA[$P{dateEnd}]]></expression>
 			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
-		<element kind="textField" uuid="a179f19b-5bd8-41ea-9813-110c77994791" x="240" y="40" width="100" height="20" fontName="TH SarabunPSK" fontSize="17.0" pattern="MMM d, yyyy" blankWhenNull="true">
+		<element kind="textField" uuid="a179f19b-5bd8-41ea-9813-110c77994791" x="240" y="40" width="100" height="20" fontName="Sarabun" fontSize="14.0" pattern="MMM d, yyyy" blankWhenNull="true">
 			<expression><![CDATA[$P{dateStart}]]></expression>
 			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
@@ -133,7 +133,7 @@ ORDER BY information_schema.`TABLES`.`TABLE_TYPE` DESC,
 			<expression><![CDATA[$P{db}]]></expression>
 			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
-		<element kind="textField" uuid="da32986c-d2fd-40cc-9a55-89e5cd7b6b5b" x="140" y="0" width="280" height="20" fontName="TH SarabunPSK" fontSize="16.0" blankWhenNull="true" bold="true" hTextAlign="Center">
+		<element kind="textField" uuid="da32986c-d2fd-40cc-9a55-89e5cd7b6b5b" x="140" y="0" width="280" height="20" fontName="Sarabun" fontSize="13.0" blankWhenNull="true" bold="true" hTextAlign="Center">
 			<expression><![CDATA[$P{comName}]]></expression>
 			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
