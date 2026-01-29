@@ -22,10 +22,10 @@
 		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="idList" class="java.lang.String"/>
-	<parameter name="dateFrom" evaluationTime="Late" class="java.util.Date">
+	<parameter name="dateStart" evaluationTime="Late" class="java.util.Date">
 		<defaultValueExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{startDate})]]></defaultValueExpression>
 	</parameter>
-	<parameter name="dateTo" evaluationTime="Late" class="java.util.Date">
+	<parameter name="dateEnd" evaluationTime="Late" class="java.util.Date">
 		<defaultValueExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{endDate})]]></defaultValueExpression>
 	</parameter>
 	<query language="sql"><![CDATA[select table_type, table_name, table_comment
@@ -93,11 +93,11 @@ order by table_type, table_name]]></query>
 			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
 		<element kind="textField" uuid="b694f1ba-fad6-4c40-97ca-fe556a63db21" x="240" y="60" width="100" height="20" fontName="TH SarabunPSK" fontSize="17.0" pattern="MMM d, yyyy" blankWhenNull="true">
-			<expression><![CDATA[$P{dateTo}]]></expression>
+			<expression><![CDATA[$P{dateEnd}]]></expression>
 			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
 		<element kind="textField" uuid="a179f19b-5bd8-41ea-9813-110c77994791" x="240" y="40" width="100" height="20" fontName="TH SarabunPSK" fontSize="17.0" pattern="MMM d, yyyy" blankWhenNull="true">
-			<expression><![CDATA[$P{dateFrom}]]></expression>
+			<expression><![CDATA[$P{dateStart}]]></expression>
 			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
 		<element kind="textField" uuid="51faaf61-3f5f-4d9f-b876-3ee516fa446c" x="60" y="40" width="100" height="20" fontName="TH SarabunPSK" fontSize="17.0" blankWhenNull="true">
