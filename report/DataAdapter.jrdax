@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <jdbcDataAdapter class="net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl">
-  <name>shadowtest</name>
-  <driver>org.mariadb.jdbc.Driver</driver>
-  <username>kxtest</username>
-  <password>kxtest</password>
-  <url>jdbc:mariadb://localhost:3306/kxtest</url>
-  <database></database>
-  <savePassword>true</savePassword>
-  <serverAddress></serverAddress>
-  <autoCommit>true</autoCommit>
+	<name>shadowtest</name>
+	<driver>org.mariadb.jdbc.Driver</driver>
+	<username>kxreport</username>
+	<password>kxreport</password>
+	<url>jdbc:mariadb://localhost:3306/kxtest</url>
+	<database></database>
+	<savePassword>true</savePassword>
+	<serverAddress></serverAddress>
+	<autoCommit>true</autoCommit>
 </jdbcDataAdapter>
