@@ -2,88 +2,124 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>KEEHIN Simple Report List</title>
+        <title>KEEHIN REPORT LIST - TREE MODE</title>
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+
             body {
-                /* Zen: Light, neutral background for space */
-                background-color: #e8e8e8;
-                color: #333; /* Soft black/dark gray for high readability */
+                background-color: #f4f7f6;
+                color: #2c3e50;
+                font-family: 'Fira Code', monospace;
+                margin: 0;
+                padding: 30px;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
                 align-items: center;
             }
 
-            table {
-                /* Zen: Minimalist border, no strong separation */
-                border: 1px solid #ccc;
-                border-collapse: collapse;
-                margin-top: 40px; /* More vertical space */
-                width: 90%;
-                max-width: 1000px;
-                /* No Box Shadow for a flat, clean look */
-                box-shadow: none;
-                background-color: white; /* Table surface is pure white */
+            #tree-container {
+                width: 95%;
+                max-width: 1200px;
+                background-color: #ffffff;
+                border: 1px solid #dcdde1;
+                border-radius: 8px;
+                padding: 25px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+                white-space: pre;
+                overflow-x: auto;
+                font-size: 14px;
+                line-height: 1.6;
             }
 
-            th,
-            td {
-                /* Light gray borders, emphasizing negative space */
-                border: 1px solid #aaa;
-                padding: 4px; /* Increased padding for more breathing room */
-                text-align: center;
+            .header {
+                width: 95%;
+                max-width: 1200px;
+                margin-bottom: 15px;
+                display: flex;
+                justify-content: space-between;
+                font-weight: bold;
+                border-bottom: 2px solid #2c3e50;
+                padding-bottom: 10px;
             }
 
-            th {
-                /* Muted, very light gray header */
-                background-color: #b8b8b8;
-                font-weight: normal; /* Less emphasis on the header text */
-                text-align: center;
+            .path-info {
+                color: #34495e;
             }
         </style>
     </head>
     <body>
-        <table id="reportTable">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>File Name</th>
-                    <th>Report Name</th>
-                    <th>Last Updated</th>
-                    <th>Size(K)</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
+        <div class="header">
+            <span>DIRECTORY STRUCTURE</span>
+            <span>DATE / SIZE</span>
+        </div>
+        <pre id="tree-container">INITIALIZING DIRECTORY SCAN...</pre>
 
         <script>
-            const tableBody = document.getElementById("tableBody")
-            const reportTable = document.getElementById("reportTable")
+            const treeContainer = document.getElementById("tree-container");
+
+            function pad(str, length, char = ' ') {
+                str = String(str || "");
+                return str.padEnd(length, char);
+            }
+
+            function rightJustify(mainText, metadata, totalWidth) {
+                const spaces = totalWidth - mainText.length - metadata.length;
+                return mainText + (spaces > 0 ? " ".repeat(spaces) : "  ") + metadata;
+            }
 
             async function fetchAndRenderReports() {
-                tableBody.innerHTML = ""
                 try {
-                    const response = await fetch("json")
-                    if (!response.ok) 
-                        throw new Error(`HTTP error! Status: ${response.status}`)
+                    const response = await fetch("json");
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                     
-                    const data = await response.json()
-                    let index = 0
-                    for (let reportData of data) {
-                        const row = tableBody.insertRow()
-                        if (reportData.report) index++
-                        else index = 0
-                        row.insertCell().textContent = index == 0 ? "" : index
-                        row.insertCell().textContent = reportData.file // Key from your JSON map
-                        row.insertCell().textContent = reportData.report // Key from your JSON map
-                        row.insertCell().textContent = reportData.updated // Key from your JSON map
-                        row.insertCell().textContent = reportData.size // Key from your JSON map
+                    const data = await response.json();
+                    if (!data || data.length === 0) {
+                        treeContainer.textContent = "NO REPORTS FOUND.";
+                        return;
                     }
+
+                    // Identify the root path if possible (the first entry which is usually the root dir from Files.walk)
+                    let rootPath = "";
+                    for (let item of data) {
+                        if (!item.report && item.file.includes("/")) {
+                            rootPath = item.file;
+                            break;
+                        }
+                    }
+
+                    let output = "";
+                    const TOTAL_WIDTH = 110;
+
+                    data.forEach((item, index) => {
+                        let line = "";
+                        let metadata = "";
+
+                        if (item.report) {
+                            // It's a file
+                            const prefix = index === data.length - 1 ? "└── " : "├── ";
+                            line = prefix + item.file + " (" + item.report + ")";
+                            metadata = pad(item.updated, 20) + " " + pad(item.size + "K", 8, ' ');
+                        } else {
+                            // It's a directory
+                            let dirName = item.file;
+                            if (rootPath && dirName.startsWith(rootPath)) {
+                                dirName = dirName.substring(rootPath.length) || "/";
+                            }
+                            line = "📂 " + dirName;
+                            metadata = "";
+                        }
+
+                        output += rightJustify(line, metadata, TOTAL_WIDTH) + "\n";
+                    });
+
+                    treeContainer.textContent = output;
                 } catch (error) {
-                    console.error("Error fetching report data:", error)
+                    treeContainer.textContent = "ERROR: FAILED TO LOAD DIRECTORY STRUCTURE\n" + error.message;
+                    console.error("Error fetching report data:", error);
                 }
             }
-            document.addEventListener("DOMContentLoaded", fetchAndRenderReports)
+
+            document.addEventListener("DOMContentLoaded", fetchAndRenderReports);
         </script>
     </body>
 </html>

@@ -12,7 +12,9 @@
 	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="0"/>
 	<parameter name="report" class="java.lang.String"/>
 	<parameter name="app" class="java.lang.String"/>
-	<parameter name="db" class="java.lang.String"/>
+	<parameter name="db" class="java.lang.String">
+		<defaultValueExpression><![CDATA["kxtest"]]></defaultValueExpression>
+	</parameter>
 	<parameter name="comCode" class="java.lang.String"/>
 	<parameter name="startDate" class="java.lang.String"/>
 	<parameter name="endDate" class="java.lang.String"/>
