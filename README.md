@@ -118,19 +118,6 @@ echo "Start ${TOMCAT} service... [PRESS Q TO CLOSE]"
 sudo systemctl status ${TOMCAT}
 ```
 
-## Jasper Files Folder in /khgroup/report
-
-You should save Jasper Report Sources (\*.jrxml) in your report project.
-Just copy compiled version (\*.jasper) to this folder.
-
-> make symbolic link in kxreport/report/app to your report project
-
-```bash
-ln -s "${YOUR_PROJECT}/report" ./report/app
-cp -ur "${YOUR_PROJECT}/report/*/" /khgroup/report
-find "${YOUR_PROJECT}/report" -type f -name "*.jasper" -exec cp -ur -t /khgroup/report {} +
-```
-
 ---
 
 ### Folder Structure

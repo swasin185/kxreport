@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <title>KEEHIN REPORT LIST - TREE MODE</title>
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+            @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap");
 
             body {
                 background-color: #f4f7f6;
                 color: #2c3e50;
-                font-family: 'Fira Code', monospace;
+                font-family: "Fira Code", monospace;
                 margin: 0;
                 padding: 30px;
                 display: flex;
@@ -55,71 +55,101 @@
         <pre id="tree-container">INITIALIZING DIRECTORY SCAN...</pre>
 
         <script>
-            const treeContainer = document.getElementById("tree-container");
+            const treeContainer = document.getElementById("tree-container")
 
-            function pad(str, length, char = ' ') {
-                str = String(str || "");
-                return str.padEnd(length, char);
+            function pad(str, length, char = " ") {
+                str = String(str || "")
+                return str.padEnd(length, char)
             }
 
             function rightJustify(mainText, metadata, totalWidth) {
-                const spaces = totalWidth - mainText.length - metadata.length;
-                return mainText + (spaces > 0 ? " ".repeat(spaces) : "  ") + metadata;
+                const spaces = totalWidth - mainText.length - metadata.length
+                return mainText + (spaces > 0 ? " ".repeat(spaces) : "  ") + metadata
+            }
+
+            function buildTree(data) {
+                const root = { name: "ROOT", items: {}, isDir: true }
+                data.forEach((item) => {
+                    if (item.file === "/") return
+                    const parts = item.file.split(/[/\\]/)
+                    let current = root
+                    parts.forEach((part, index) => {
+                        if (!part) return
+                        if (!current.items[part]) {
+                            current.items[part] = {
+                                name: part,
+                                items: {},
+                                isDir: item.isDir === "true" || item.size === undefined,
+                                metadata: index === parts.length - 1 ? item : null,
+                            }
+                        }
+                        current = current.items[part]
+                    })
+                })
+                return root
+            }
+
+            function renderTree(node, prefix = "", isLast = true, depth = 0) {
+                let output = ""
+                const TOTAL_WIDTH = 145
+
+                if (depth > 0) {
+                    const branch = isLast ? "└── " : "├── "
+                    let line = prefix + branch
+                    if (node.isDir) {
+                        line += "# " + node.name
+                    } else {
+                        line +=
+                            node.name +
+                            (node.metadata?.report ? " (" + node.metadata.report + ")" : "")
+                    }
+
+                    let metadataStr = ""
+                    if (node.metadata && !node.isDir) {
+                        metadataStr =
+                            pad(node.metadata.updated, 20) +
+                            " " +
+                            pad(node.metadata.size + "K", 8, " ")
+                    }
+                    output += rightJustify(line, metadataStr, TOTAL_WIDTH) + "\n"
+                } else {
+                    output += "/khgroup/report/\n"
+                }
+
+                const nextPrefix = depth === 0 ? "" : prefix + (isLast ? "    " : "│   ")
+                const childKeys = Object.keys(node.items).sort()
+                childKeys.forEach((key, index) => {
+                    output += renderTree(
+                        node.items[key],
+                        nextPrefix,
+                        index === childKeys.length - 1,
+                        depth + 1,
+                    )
+                })
+                return output
             }
 
             async function fetchAndRenderReports() {
                 try {
-                    const response = await fetch("json");
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                    
-                    const data = await response.json();
+                    const response = await fetch("json")
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
+
+                    const data = await response.json()
                     if (!data || data.length === 0) {
-                        treeContainer.textContent = "NO REPORTS FOUND.";
-                        return;
+                        treeContainer.textContent = "NO REPORTS FOUND."
+                        return
                     }
 
-                    // Identify the root path if possible (the first entry which is usually the root dir from Files.walk)
-                    let rootPath = "";
-                    for (let item of data) {
-                        if (!item.report && item.file.includes("/")) {
-                            rootPath = item.file;
-                            break;
-                        }
-                    }
-
-                    let output = "";
-                    const TOTAL_WIDTH = 110;
-
-                    data.forEach((item, index) => {
-                        let line = "";
-                        let metadata = "";
-
-                        if (item.report) {
-                            // It's a file
-                            const prefix = index === data.length - 1 ? "└── " : "├── ";
-                            line = prefix + item.file + " (" + item.report + ")";
-                            metadata = pad(item.updated, 20) + " " + pad(item.size + "K", 8, ' ');
-                        } else {
-                            // It's a directory
-                            let dirName = item.file;
-                            if (rootPath && dirName.startsWith(rootPath)) {
-                                dirName = dirName.substring(rootPath.length) || "/";
-                            }
-                            line = "📂 " + dirName;
-                            metadata = "";
-                        }
-
-                        output += rightJustify(line, metadata, TOTAL_WIDTH) + "\n";
-                    });
-
-                    treeContainer.textContent = output;
+                    const tree = buildTree(data)
+                    treeContainer.textContent = renderTree(tree)
                 } catch (error) {
-                    treeContainer.textContent = "ERROR: FAILED TO LOAD DIRECTORY STRUCTURE\n" + error.message;
-                    console.error("Error fetching report data:", error);
+                    treeContainer.textContent =
+                        "ERROR: FAILED TO LOAD DIRECTORY STRUCTURE\n" + error.message
+                    console.error("Error fetching report data:", error)
                 }
             }
 
-            document.addEventListener("DOMContentLoaded", fetchAndRenderReports);
+            document.addEventListener("DOMContentLoaded", fetchAndRenderReports)
         </script>
     </body>
 </html>

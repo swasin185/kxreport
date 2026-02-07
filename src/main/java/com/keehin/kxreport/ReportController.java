@@ -55,14 +55,14 @@ public class ReportController {
 		Map<String, String> reportData = new HashMap<>();
 		for (Path path : paths) {
 			reportData = new HashMap<>();
+			String relativePath = reportDir.relativize(path).toString();
 			try {
 				JasperReport report = (JasperReport) JRLoader
 						.loadObjectFromFile(path.toAbsolutePath().toString());
-				String fileName = path.getFileName().toString();
-				String nameWithoutExt = fileName.substring(0, fileName.indexOf(JASPER));
-				// String relativePath = reportDir.relativize(path).toString();
-				// String nameWithoutExt = relativePath.substring(0,
-				// relativePath.indexOf(JASPER));
+				// String fileName = path.getFileName().toString();
+				// String nameWithoutExt = fileName.substring(0, fileName.indexOf(JASPER));
+				String nameWithoutExt = relativePath.substring(0,
+				relativePath.indexOf(JASPER));
 
 				reportData.put("file", nameWithoutExt);
 				reportData.put("report", report.getName());
@@ -71,7 +71,7 @@ public class ReportController {
 				reportData.put("size", String.valueOf(kilobytes));
 				data.add(reportData);
 			} catch (Exception e) {
-				reportData.put("file", path.toAbsolutePath().toString());
+				reportData.put("file", relativePath);
 				data.add(reportData);
 			}
 		}

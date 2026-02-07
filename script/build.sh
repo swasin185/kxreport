@@ -16,12 +16,13 @@ echo "Running Maven clean and package..."
 mvn clean package
 
 echo "Setting up report directory: ${REPORT_DIR}"
-sudo rm -r ${REPORT_DIR}/*.jasper
-sudo rm -rf ${REPORT_DIR}/kxtest
+sudo rm -rf ${REPORT_DIR}
 sudo mkdir -p ${REPORT_DIR}
-sudo cp -ur ${JASPER_SRC_DIR}/*/ ${REPORT_DIR}/
-sudo find ${JASPER_SRC_DIR} -type f -name "*.jasper" -exec cp -ur -t /khgroup/report {} +
-
+sudo rsync -aL \
+  --include='*/' \
+  --include='*.jasper' \
+  --exclude='*' \
+  ${JASPER_SRC_DIR}/ ${REPORT_DIR}
 
 echo "Stop ${TOMCAT} service..."
 sudo systemctl stop ${TOMCAT}

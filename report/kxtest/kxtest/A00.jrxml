@@ -1,0 +1,313 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="รายงานทดสอบ" language="java" columnCount="2" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="277" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7bb9570d-a0f5-4f1b-9563-2c60329bad92">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.report.description" value="รายงานทดสอบ  ชื่อ table ใน database"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="1000"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="0"/>
+	<parameter name="report" class="java.lang.String"/>
+	<parameter name="app" class="java.lang.String"/>
+	<parameter name="db" class="java.lang.String">
+		<defaultValueExpression><![CDATA["kxtest"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="comCode" class="java.lang.String"/>
+	<parameter name="startDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String"/>
+	<parameter name="comName" class="java.lang.String"/>
+	<parameter name="fromId" class="java.lang.String"/>
+	<parameter name="toId" class="java.lang.String"/>
+	<parameter name="option" class="java.lang.String">
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="printTime" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="idList" class="java.lang.String"/>
+	<parameter name="dateStart" evaluationTime="Late" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{startDate})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dateEnd" evaluationTime="Late" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{endDate})]]></defaultValueExpression>
+	</parameter>
+	<query language="sql"><![CDATA[SELECT table_type, table_name, table_comment, table_rows
+FROM information_schema.`TABLES`, (select sleep($P{option})) delay
+WHERE 
+	 information_schema.`TABLES`.`TABLE_SCHEMA` = $P{db} 
+ORDER BY information_schema.`TABLES`.`TABLE_TYPE` DESC,
+	information_schema.`TABLES`.`TABLE_NAME` DESC]]></query>
+	<field name="table_type" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TABLE_TYPE"/>
+		<property name="com.jaspersoft.studio.field.label" value="table_type"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="TABLES"/>
+	</field>
+	<field name="table_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TABLE_NAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="table_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="TABLES"/>
+	</field>
+	<field name="table_comment" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TABLE_COMMENT"/>
+		<property name="com.jaspersoft.studio.field.label" value="table_comment"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="TABLES"/>
+	</field>
+	<field name="table_rows" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="TABLE_ROWS"/>
+		<property name="com.jaspersoft.studio.field.label" value="table_rows"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="TABLES"/>
+	</field>
+	<group name="type">
+		<expression><![CDATA[$F{table_type}]]></expression>
+		<groupHeader>
+			<band height="30">
+				<printWhenExpression><![CDATA[$F{table_type} != null]]></printWhenExpression>
+				<element kind="textField" uuid="b101ba11-2351-48a4-89dc-e96983822aa2" x="0" y="0" width="90" height="16" fontName="TH SarabunPSK" fontSize="14.0" blankWhenNull="true" bold="true" underline="false">
+					<expression><![CDATA[$F{table_type}]]></expression>
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<box leftPadding="5" rightPadding="5"/>
+				</element>
+				<element kind="staticText" uuid="e31dd1d5-c996-49ae-a7ce-cdaba7639987" x="0" y="14" width="25" height="16" fontName="TH SarabunPSK" fontSize="14.0" bold="false">
+					<text><![CDATA[No.]]></text>
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<box leftPadding="5" rightPadding="5"/>
+				</element>
+				<element kind="staticText" uuid="33031cad-9df4-496a-b42e-02079b7134fd" x="25" y="14" width="65" height="16" fontName="TH SarabunPSK" fontSize="14.0" bold="false">
+					<text><![CDATA[name]]></text>
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<box leftPadding="0" rightPadding="0"/>
+				</element>
+				<element kind="staticText" uuid="d70f552a-c0a7-43b2-abee-eaee282940a1" x="90" y="14" width="150" height="16" fontName="TH SarabunPSK" fontSize="14.0" bold="false">
+					<text><![CDATA[comment]]></text>
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0271f8a5-c2e0-40e9-ba59-ed0a14857498"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<box leftPadding="0" rightPadding="5"/>
+				</element>
+				<element kind="staticText" uuid="9064442e-a1ed-49eb-86ed-ea532c9c73c5" x="240" y="14" width="30" height="16" fontName="TH SarabunPSK" fontSize="14.0" bold="false" hTextAlign="Right">
+					<text><![CDATA[rows]]></text>
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<box leftPadding="0" rightPadding="2"/>
+				</element>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="16">
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</band>
+		</groupFooter>
+	</group>
+	<title height="100" splitType="Stretch">
+		<element kind="textField" uuid="14eae146-f352-4fe7-be4d-137d04665e17" x="440" y="60" width="100" height="20" fontName="TH SarabunPSK" fontSize="17.0" blankWhenNull="true">
+			<expression><![CDATA[$P{toId}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="7b2f1320-f6f4-4cf8-9b81-d1fbb04783f1" x="440" y="40" width="100" height="20" fontName="TH SarabunPSK" fontSize="17.0" blankWhenNull="true">
+			<expression><![CDATA[$P{fromId}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="b694f1ba-fad6-4c40-97ca-fe556a63db21" x="240" y="60" width="100" height="20" fontName="Sarabun" fontSize="14.0" pattern="MMM d, yyyy" blankWhenNull="true">
+			<expression><![CDATA[$P{dateEnd}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="a179f19b-5bd8-41ea-9813-110c77994791" x="240" y="40" width="100" height="20" fontName="Sarabun" fontSize="14.0" pattern="MMM d, yyyy" blankWhenNull="true">
+			<expression><![CDATA[$P{dateStart}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="51faaf61-3f5f-4d9f-b876-3ee516fa446c" x="60" y="40" width="100" height="20" fontName="TH SarabunPSK" fontSize="17.0" blankWhenNull="true">
+			<expression><![CDATA[$P{comCode}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="2a060f16-05e8-44ed-9d1a-f1ef857e3ae3" x="60" y="60" width="100" height="20" fontName="TH SarabunPSK" fontSize="17.0" blankWhenNull="true">
+			<expression><![CDATA[$P{db}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="da32986c-d2fd-40cc-9a55-89e5cd7b6b5b" x="140" y="0" width="280" height="20" fontName="Sarabun" fontSize="13.0" blankWhenNull="true" bold="true" hTextAlign="Center">
+			<expression><![CDATA[$P{comName}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="10d948fc-3a77-4def-babf-f519c498205d" x="140" y="20" width="280" height="20" fontName="TH SarabunPSK" fontSize="16.0" evaluationTime="Auto" blankWhenNull="true" bold="true" hTextAlign="Center">
+			<expression><![CDATA[$P{JASPER_REPORT}.getName() + " - " + ($P{app} != null ? $P{app} : "")]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="02ad9817-1578-4d42-9b92-d4385ad022a7" x="60" y="80" width="30" height="20" fontName="TH SarabunPSK" fontSize="17.0" blankWhenNull="true" hTextAlign="Left">
+			<expression><![CDATA[$P{option}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="dc543968-34bf-40d6-ac94-6843c2c3bec8" x="0" y="12" width="70" height="14" fontName="TH SarabunPSK" fontSize="12.0" pattern="d/MM/yy HH:mm:ss " blankWhenNull="true">
+			<expression><![CDATA[$P{printTime}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+		</element>
+		<element kind="textField" uuid="6e25d113-50e3-4275-a8cc-bccdfe3c8b67" x="0" y="0" width="40" height="14" fontName="TH SarabunPSK" fontSize="12.0" blankWhenNull="true">
+			<expression><![CDATA["[" + $P{report} + "]"]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="97dd4b65-87a7-45c9-a4a7-2d8b06637aae" x="505" y="0" width="25" height="14" fontName="TH SarabunPSK" fontSize="12.0" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="textField" uuid="a7851876-defd-4a2c-8aa5-713022c8eba8" x="530" y="0" width="25" height="14" fontName="TH SarabunPSK" fontSize="12.0" evaluationTime="Report" blankWhenNull="true" hTextAlign="Left">
+			<expression><![CDATA[" / " + $V{PAGE_NUMBER}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="e92f0a4f-324a-47c7-a16d-63ce20748e7f" x="0" y="40" width="60" height="20" fontName="TH SarabunPSK" fontSize="16.0" bold="false">
+			<text><![CDATA[comCode:]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<box leftPadding="0" rightPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="ac974646-e590-4c19-807d-bfeb09e63568" x="0" y="60" width="60" height="20" fontName="TH SarabunPSK" fontSize="16.0" bold="false">
+			<text><![CDATA[database:]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<box leftPadding="0" rightPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="4af8a55c-c1f0-40bc-ac08-09f5d43aadd5" x="0" y="80" width="60" height="20" fontName="TH SarabunPSK" fontSize="16.0" bold="false">
+			<text><![CDATA[option:]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<box leftPadding="0" rightPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="f02c779b-fdf1-4714-a2ac-8fcf68fb2376" x="180" y="40" width="60" height="20" fontName="TH SarabunPSK" fontSize="16.0" bold="false">
+			<text><![CDATA[startDate:]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<box leftPadding="0" rightPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="d0956c0d-8b09-4359-8106-5d66f2c5af99" x="180" y="60" width="60" height="20" fontName="TH SarabunPSK" fontSize="16.0" bold="false">
+			<text><![CDATA[endDate:]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<box leftPadding="0" rightPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="6dedfe53-39d5-4fa4-95bf-cadd3a4aaae5" x="380" y="40" width="60" height="20" fontName="TH SarabunPSK" fontSize="16.0" bold="false">
+			<text><![CDATA[fromId:]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<box leftPadding="0" rightPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="0247c75c-004c-47da-b6df-0413acfef612" x="380" y="60" width="60" height="20" fontName="TH SarabunPSK" fontSize="16.0" bold="false">
+			<text><![CDATA[toId:]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<box leftPadding="0" rightPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="3fe5e4be-b997-40cc-b14b-04343d4d44f2" x="180" y="80" width="60" height="20" fontName="TH SarabunPSK" fontSize="16.0" bold="false">
+			<text><![CDATA[idList:]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<box leftPadding="0" rightPadding="0"/>
+		</element>
+		<element kind="textField" uuid="5352f1b5-a787-4626-bbf8-c75d7f9c6dfa" x="240" y="80" width="300" height="20" fontName="TH SarabunPSK" fontSize="17.0" blankWhenNull="true">
+			<expression><![CDATA[$P{idList}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</title>
+	<pageHeader height="15">
+		<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+		<element kind="textField" uuid="5310ed09-78d8-49ce-bbc9-6affeeb02c94" x="505" y="0" width="25" height="14" fontName="TH SarabunPSK" fontSize="12.0" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="textField" uuid="7a3758de-8487-4b86-9e59-a60eeef3b437" x="530" y="0" width="25" height="14" fontName="TH SarabunPSK" fontSize="12.0" evaluationTime="Report" blankWhenNull="true" hTextAlign="Left">
+			<expression><![CDATA[" / " + $V{PAGE_NUMBER}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</pageHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<element kind="textField" uuid="b425a371-26d7-41e1-aa74-da7e6961b4ab" x="90" y="0" width="150" height="16" fontName="TH SarabunPSK" fontSize="14.0">
+				<expression><![CDATA[$F{table_comment}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0271f8a5-c2e0-40e9-ba59-ed0a14857498"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<box leftPadding="0" rightPadding="5"/>
+			</element>
+			<element kind="textField" uuid="c5abc968-dfdd-4e2b-bc95-97c6ffc5d259" x="25" y="0" width="65" height="16" fontName="TH SarabunPSK" fontSize="14.0">
+				<expression><![CDATA[$F{table_name}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<box leftPadding="0" rightPadding="0"/>
+			</element>
+			<element kind="textField" uuid="9c5f7156-05c3-4b8d-8f54-396ba5e64149" x="-5" y="0" width="25" height="16" fontName="TH SarabunPSK" fontSize="14.0" hTextAlign="Right">
+				<expression><![CDATA[$V{REPORT_COUNT}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<box leftPadding="5" rightPadding="5"/>
+			</element>
+			<element kind="textField" uuid="131ee5e6-ecbc-404f-b472-b7735e7e6126" x="220" y="0" width="50" height="16" fontName="TH SarabunPSK" fontSize="14.0" pattern="#" blankWhenNull="true" hTextAlign="Right">
+				<expression><![CDATA[$F{table_rows}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31f57aeb-d847-481f-bfc0-4b397478f5d7"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<box leftPadding="0" rightPadding="2"/>
+			</element>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.layout"/>
+		</band>
+	</detail>
+	<summary height="304" splitType="Stretch">
+		<element kind="image" uuid="373b3c74-62ec-4c19-a5c2-6ef85fc77be1" x="180" y="0" width="200" height="60" onErrorType="Blank" linkType="None" linkTarget="Self">
+			<expression><![CDATA["static/img/khlogo-xs.png"]]></expression>
+		</element>
+		<element kind="chart" chartType="pie3D" uuid="8ec268a4-645c-4bb9-ae97-3bb3df21bdb3" stretchType="ContainerHeight" x="0" y="60" width="555" height="244" evaluationTime="Report">
+			<dataset kind="pie">
+				<series>
+					<keyExpression><![CDATA[$F{table_name}]]></keyExpression>
+					<valueExpression><![CDATA[$F{table_rows} != null ? $F{table_rows} : 0]]></valueExpression>
+					<labelExpression><![CDATA[$F{table_name}]]></labelExpression>
+				</series>
+			</dataset>
+			<plot>
+				<itemLabel/>
+			</plot>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+		</element>
+		<element kind="component" uuid="abb144cc-126a-4b3b-bcf8-51c76153959c" x="0" y="0" width="96" height="60">
+			<component kind="barcode4j:QRCode" evaluationTime="Report">
+				<codeExpression><![CDATA["swasin185@gmail.com"]]></codeExpression>
+			</component>
+			<property name="com.jaspersoft.studio.unit.margin" value="pixel"/>
+		</element>
+		<element kind="component" uuid="678dcca3-dee4-4377-8fbc-cf44af97744c" x="480" y="9" width="75" height="40">
+			<component kind="barcode4j:Code128">
+				<codeExpression><![CDATA["0836666150"]]></codeExpression>
+			</component>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</summary>
+</jasperReport>
