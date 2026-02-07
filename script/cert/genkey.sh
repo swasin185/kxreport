@@ -5,3 +5,4 @@ sudo cp cert.pem /etc/cert/
 sudo cp key.pem /etc/cert/
 sudo chgrp tomcat /etc/cert/*.pem
 sudo chmod 640 /etc/cert/*.pem
+sudo cp server.xml /var/lib/tomcat10/conf/server.xml

@@ -60,6 +60,10 @@ public class ReportController {
 						.loadObjectFromFile(path.toAbsolutePath().toString());
 				String fileName = path.getFileName().toString();
 				String nameWithoutExt = fileName.substring(0, fileName.indexOf(JASPER));
+				// String relativePath = reportDir.relativize(path).toString();
+				// String nameWithoutExt = relativePath.substring(0,
+				// relativePath.indexOf(JASPER));
+
 				reportData.put("file", nameWithoutExt);
 				reportData.put("report", report.getName());
 				reportData.put("updated", dtFormat.format(Files.getLastModifiedTime(path).toMillis()));
