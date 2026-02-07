@@ -9,18 +9,18 @@
 
         <Connector port="8080"
             redirectPort="8443" 
-            executer="threadPool" />
+            executor="threadPool" />
         
         <Connector port="8443" 
             protocol="org.apache.coyote.http11.Http11NioProtocol"
             SSLEnabled="true" 
             scheme="https" 
             secure="true"
-            executer="threadPool">
+            executor="threadPool">
             <SSLHostConfig>
                 <Certificate type="RSA"
-                    certificateFile="/etc/ssl/certs/cert.pem"
-                    certificateKeyFile="/etc/ssl/private/key.pem" />
+                    certificateFile="/etc/cert/cert.pem"
+                    certificateKeyFile="/etc/cert/key.pem" />
             </SSLHostConfig>
         </Connector>
         
