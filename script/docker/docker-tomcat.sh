@@ -5,7 +5,7 @@ docker run -d --rm \
   --network "host" \
   -v $(pwd)/../../target:/usr/local/tomcat/webapps \
   -v $(pwd)/../../target/jasper:/khgroup/report \
-  -v $(pwd)/../cert/cert.pem:/etc/ssl/certs/cert.pem:ro \
-  -v $(pwd)/../cert/key.pem:/etc/ssl/private/key.pem:ro \
+  -v $(pwd)/../cert/cert.pem:/etc/cert/cert.pem:ro \
+  -v $(pwd)/../cert/key.pem:/etc/cert/key.pem:ro \
   -v $(pwd)/../cert/server.xml:/usr/local/tomcat/conf/server.xml:ro \
   tomcat:11-jre25

@@ -2,6 +2,9 @@ HELP.md
 target/
 !**/src/main/**/target/
 !**/src/test/**/target/
+node_modules/
+package.json
+pnpm-lock.yaml
 
 ### STS ###
 .apt_generated
