@@ -7,6 +7,7 @@
             minSpareThreads="5"
             maxQueueSize="100"/>
 
+        <!-- Connector port="8080" address="127.0.0.1" -->
         <Connector port="8080"
             redirectPort="8443" 
             executor="threadPool" />
