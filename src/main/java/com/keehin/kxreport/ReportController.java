@@ -62,7 +62,7 @@ public class ReportController {
 				// String fileName = path.getFileName().toString();
 				// String nameWithoutExt = fileName.substring(0, fileName.indexOf(JASPER));
 				String nameWithoutExt = relativePath.substring(0,
-				relativePath.indexOf(JASPER));
+						relativePath.indexOf(JASPER));
 
 				reportData.put("file", nameWithoutExt);
 				reportData.put("report", report.getName());
@@ -164,14 +164,18 @@ public class ReportController {
 
 	private JasperPrint loadJasperFile(Parameter params) throws SQLException, JRException {
 		JasperPrint report = null;
-		Connection conn = db.getConnection(params.getDb());
-		if (params.getIdList() != null)
-			this.createTempIdList(conn, params.getIdList());
-		report = JasperFillManager
-				.fillReport((JasperReport) JRLoader.loadObjectFromFile(getJasperFile(params)),
-						mapper.convertValue(params, new TypeReference<>() {
-						}),
-						conn);
+		try (Connection conn = db.getConnection(params.getDb())) {
+			if (params.getIdList() != null)
+				this.createTempIdList(conn, params.getIdList());
+
+			report = JasperFillManager
+					.fillReport((JasperReport) JRLoader.loadObjectFromFile(getJasperFile(params)),
+							mapper.convertValue(params, new TypeReference<>() {
+							}),
+							conn);
+		} catch (SQLException e) {
+			logger.error("Error loading report", e);
+		}
 		return report;
 	}
 

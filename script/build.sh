@@ -16,7 +16,6 @@ echo "Running Maven clean and package..."
 mvn clean package
 
 echo "Setting up report directory: ${REPORT_DIR}"
-sudo rm -rf ${REPORT_DIR}
 sudo mkdir -p ${REPORT_DIR}
 sudo rsync -aL \
   --include='*/' \
