@@ -217,3 +217,6 @@ kxreport.db.config.ssl = ${kxreport.db.config}&useSSL=true&requireSSL=false
 - OR put the modified application.properties in /var/lib/tomcat10/
 
 ---
+### [./script/mem.sh](./script/mem.sh)
+
+Show memory usage of tomcat and database process/connection
