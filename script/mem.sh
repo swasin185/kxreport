@@ -29,9 +29,8 @@ echo "--------------------------------------------------------------------------
 echo 
 echo -e "Database Connections"
 sudo mysql -e \
-    "SELECT user, host, db, count(*) as COUNT, round(avg(time), 2) as avg_time,\
+    "SELECT user, db, count(*) as count, round(avg(time), 2) as avg_time,\
     round(avg(MEMORY_USED) / 1024, 2) as 'used_MB', round(max(MAX_MEMORY_USED) / 1024, 2) as 'max_MB' \
     FROM information_schema.processlist \
     WHERE user!= 'root' \
-    GROUP BY user, host, db \
-    ORDER BY MEMORY_USED DESC;"
+    GROUP BY user, host, db"
