@@ -28,12 +28,10 @@ for pid in $(pgrep -u tomcat); do
     # 3. Print combined row
     echo -e "$pid\t$USER\t${RSS}\t$JVM_INFO"
 done
-echo "-------------------------------------------------------------------------------"
-echo 
-echo -e "Database Connections"
 sudo /usr/bin/mysql -e \
     "SELECT user, db, count(*) as count, round(avg(time), 2) as avg_time,\
     round(avg(MEMORY_USED) / 1024, 2) as 'avg_MB', round(sum(MEMORY_USED) / 1024, 2) as 'total_MB' \
     FROM information_schema.processlist \
     WHERE user!= 'root' \
     GROUP BY user, db"
+echo
