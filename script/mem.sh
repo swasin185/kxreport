@@ -33,4 +33,4 @@ sudo mysql -e \
     round(avg(MEMORY_USED) / 1024, 2) as 'used_MB', round(max(MAX_MEMORY_USED) / 1024, 2) as 'max_MB' \
     FROM information_schema.processlist \
     WHERE user!= 'root' \
-    GROUP BY user, host, db"
+    GROUP BY user, db"
