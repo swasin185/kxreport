@@ -48,7 +48,6 @@ public class Database {
     }
 
     public Connection getConnection(String db) throws SQLException {
-        logger.info("Database getConnection {} {}", dbConfig, reportPath);
         Connection conn = null;
         if (pools.get(db) == null) {
             String dbURI = jdbcUri + db + dbConfig;
