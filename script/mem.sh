@@ -10,7 +10,7 @@ ps -o pid,user,rss,command -e | awk '
   }'
   
 echo
-echo -e "JAVA\tUSER\tRAM_MB\tSURV\tNURS\tLONG\tJVM\tGC"
+echo -e "JAVA\tUSER\tRAM_MB\tSURV\tNURS\tLONG\tJVM\tGC\tCLEAN"
 echo "-----------------------------------------------------------------------------------"
 for pid in $(pgrep -u tomcat); do
     # 1. Get System Info (User and RSS)
@@ -29,8 +29,9 @@ echo "--------------------------------------------------------------------------
 echo 
 echo -e "Database Connections"
 sudo mysql -e \
-    "SELECT id, user, host, db, command, \
-    time, MEMORY_USED / 1024 as 'USED_MB', MAX_MEMORY_USED / 1024 as 'MAX_MB' \
+    "SELECT user, host, db, count(*) as COUNT, round(avg(time), 2) as avg_time,\
+    round(avg(MEMORY_USED) / 1024, 2) as 'used_MB', round(max(MAX_MEMORY_USED) / 1024, 2) as 'max_MB' \
     FROM information_schema.processlist \
     WHERE user!= 'root' \
+    GROUP BY user, host, db \
     ORDER BY MEMORY_USED DESC;"

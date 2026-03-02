@@ -220,3 +220,22 @@ kxreport.db.config.ssl = ${kxreport.db.config}&useSSL=true&requireSSL=false
 ### [./script/mem.sh](./script/mem.sh)
 
 Show memory usage of tomcat and database process/connection
+
+```bash
+$ ./script/mem.sh
+PID     USER    RAM_MB  COMMAND
+1490    tomcat  364.246 /usr/lib/jvm/default-java/bin/java
+1519    mysql   163.277 /usr/sbin/mariadbd
+
+JAVA    USER    RAM_MB  SURV    NURS    LONG    JVM     GC      CLEAN
+-----------------------------------------------------------------------------------
+1490    tomcat  364.246 0.00    6.00    12.00   35.05   61.23   0
+-----------------------------------------------------------------------------------
+
+Database Connections
++----------+-----------------+--------+-------+----------+---------+---------+
+| user     | host            | db     | COUNT | avg_time | used_MB | max_MB  |
++----------+-----------------+--------+-------+----------+---------+---------+
+| kxreport | localhost:42446 | kxtest |     1 |    57.00 |   92.97 | 2827.37 |
++----------+-----------------+--------+-------+----------+---------+---------+
+```
