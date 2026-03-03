@@ -1,4 +1,4 @@
-# Testing (kxreport)
+# Testing (GPT 5.2)
 
 ## Run tests
 
