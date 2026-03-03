@@ -36,6 +36,6 @@ class ReportPathResolverTest {
 	@Test
 	void default_report_name_is_A00_when_report_is_null() {
 		Path actual = ReportPathResolver.resolve(reportRoot, "app", "db1", null);
-		assertThat(actual.getFileName().toString()).isEqualTo("A00.jasper");
+		assertThat(actual.getFileName()).hasToString("A00.jasper");
 	}
 }

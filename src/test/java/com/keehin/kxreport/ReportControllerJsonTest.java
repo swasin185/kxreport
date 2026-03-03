@@ -46,12 +46,13 @@ class ReportControllerJsonTest {
 				.andExpect(status().isOk())
 				.andReturn();
 
-		Map<String, String>[] body = mapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<>() {
-		});
+		Map<String, String>[] body = mapper.readValue(result.getResponse().getContentAsByteArray(),
+				new TypeReference<>() {
+				});
 
 		assertThat(body).isNotNull();
-		assertThat(body.length).isGreaterThan(0);
-		assertThat(body).anySatisfy(entry -> assertThat(entry.get("file")).isEqualTo("A00"));
+		assertThat(body).hasSizeGreaterThan(0);
+		assertThat(body).anySatisfy(entry -> assertThat(entry).containsEntry("file", "A00"));
 	}
 
 	@Test
@@ -62,8 +63,9 @@ class ReportControllerJsonTest {
 				.andExpect(status().isOk())
 				.andReturn();
 
-		Map<String, String>[] body = mapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<>() {
-		});
+		Map<String, String>[] body = mapper.readValue(result.getResponse().getContentAsByteArray(),
+				new TypeReference<>() {
+				});
 
 		assertThat(body).anySatisfy(entry -> assertThat(entry.get("file")).contains("INVALID.jasper"));
 	}
