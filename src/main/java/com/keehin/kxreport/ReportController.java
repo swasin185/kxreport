@@ -180,20 +180,10 @@ public class ReportController {
 	}
 
 	private String getJasperFile(Parameter params) {
-		String jasperFileName = ((params.getReport() != null) ? params.getReport() : "A00") + JASPER;
-
-		String appPath = (params.getApp() != null) ? params.getApp() : "";
-		String dbPath = (params.getDb() != null) ? params.getDb() : "";
-
 		Path reportRoot = Paths.get(db.getReportPath());
-		if (!appPath.equals(""))
-			reportRoot = reportRoot.resolve(appPath);
-
-		Path firstLookDbPath = reportRoot.resolve(dbPath).resolve(jasperFileName);
-		if (Files.exists(firstLookDbPath))
-			return firstLookDbPath.toAbsolutePath().toString();
-
-		return reportRoot.resolve(jasperFileName).toAbsolutePath().toString();
+		return ReportPathResolver
+				.resolve(reportRoot, params.getApp(), params.getDb(), params.getReport())
+				.toString();
 	}
 
 	private static String getOutputFile(Parameter params, String sessId) {
