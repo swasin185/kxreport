@@ -136,7 +136,7 @@ Docker for evaluation or testing See ./script/docker/\*.sh.
 Docker environment use the newer version of Java, Tomcat, MariaDB.
 Update on late 2025 it support by Java v25, Tomcat v11, MariaDB v12
 
-### docker.sh
+### ./script/docker/docker.sh
 
 ```bash
 #!/bin/bash
@@ -209,8 +209,7 @@ logging.pattern.file = %d{yyyy-MM-dd HH:mm:ss} %-5level %msg%n
 kxreport.report.path = /khgroup/report/
 kxreport.db.uri = jdbc:mariadb://localhost:3306/
 kxreport.db.config = ?user=kxreport&password=kxreport\
-    &minPoolSize=1&maxPoolSize=99&maxIdleTime=60\
-    &useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=50
+    &minPoolSize=1&maxPoolSize=99&maxIdleTime=60
 kxreport.db.config.ssl = ${kxreport.db.config}&useSSL=true&requireSSL=false
 ```
 
@@ -240,3 +239,8 @@ Database Connections
 | kxreport | localhost:42446 | kxtest |     1 |    57.00 |   92.97 | 2827.37 |
 +----------+-----------------+--------+-------+----------+---------+---------+
 ```
+
+---
+### [./script/stress_test.sh](./script/stress_test.sh)
+
+Run stress test against the kxreport application (1000 requests)

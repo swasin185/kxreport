@@ -34,5 +34,5 @@ echo "Deploying WAR file to: ${TOMCAT_WEBAPPS_DIR}"
 sudo cp ${WAR_SRC_PATH} ${TOMCAT_WEBAPPS_DIR}
 
 sudo systemctl start ${TOMCAT}
-echo "Start ${TOMCAT} service... [PRESS Q TO CLOSE]"
-systemctl status ${TOMCAT}
+sudo systemctl restart mysql
+systemctl status ${TOMCAT} --no-page
