@@ -209,7 +209,8 @@ logging.pattern.file = %d{yyyy-MM-dd HH:mm:ss} %-5level %msg%n
 kxreport.report.path = /khgroup/report/
 kxreport.db.uri = jdbc:mariadb://localhost:3306/
 kxreport.db.config = ?user=kxreport&password=kxreport\
-    &minPoolSize=0&maxPoolSize=99&maxIdleTime=60
+    &minPoolSize=1&maxPoolSize=99&maxIdleTime=60\
+    &useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=50
 kxreport.db.config.ssl = ${kxreport.db.config}&useSSL=true&requireSSL=false
 ```
 
