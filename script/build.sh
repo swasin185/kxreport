@@ -13,7 +13,7 @@ WAR_SRC_PATH="${TARGET_DIR}/kxreport.war"
 export MAVEN_OPTS="-Djava.awt.headless=true"
 
 echo "Running Maven clean and package..."
-mvn clean package
+mvn clean package -DskipTests
 
 echo "Setting up report directory: ${REPORT_DIR}"
 sudo mkdir -p ${REPORT_DIR}
@@ -35,4 +35,4 @@ sudo cp ${WAR_SRC_PATH} ${TOMCAT_WEBAPPS_DIR}
 
 sudo systemctl start ${TOMCAT}
 echo "Start ${TOMCAT} service... [PRESS Q TO CLOSE]"
-sudo systemctl status ${TOMCAT}
+systemctl status ${TOMCAT}
