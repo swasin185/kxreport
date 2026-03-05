@@ -212,24 +212,26 @@ Show memory usage of tomcat and database process/connection
 
 ```bash
 $ ./script/mem.sh
-PID     USER    RAM_MB  COMMAND
-1490    tomcat  364.246 /usr/lib/jvm/default-java/bin/java
-1519    mysql   163.277 /usr/sbin/mariadbd
+--------------------------- 2026-03-05[13:34:18] -------------------------------
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       2.0Gi        10Gi        16Mi       2.5Gi        12Gi
+Swap:          2.0Gi          0B       2.0Gi
 
-JAVA    USER    RAM_MB  SURV    NURS    LONG    JVM     GC      CLEAN
------------------------------------------------------------------------------------
-1490    tomcat  364.246 0.00    6.00    12.00   35.05   61.23   0
------------------------------------------------------------------------------------
+PID	USER	RAM_MB	COMMAND
+1396	tomcat	810.438	/usr/lib/jvm/default-java/bin/java
+1428	mysql	162.141	/usr/sbin/mariadbd
 
-Database Connections
-+----------+-----------------+--------+-------+----------+---------+---------+
-| user     | host            | db     | COUNT | avg_time | used_MB | max_MB  |
-+----------+-----------------+--------+-------+----------+---------+---------+
-| kxreport | localhost:42446 | kxtest |     1 |    57.00 |   92.97 | 2827.37 |
-+----------+-----------------+--------+-------+----------+---------+---------+
+JAVA	USER	RAM_MB	SURV	NURS	LONG	JVM	GC	CLEAN
+-------------------------------------------------------------------------------
+1396	tomcat	810.438	0.00	26.00	164.00	118.13	67.54	0
++----------+--------+-------+----------+--------+----------+
+| user     | db     | count | avg_time | avg_MB | total_MB |
++----------+--------+-------+----------+--------+----------+
+| kxreport | kxtest |     1 |   437.00 |  92.97 |    92.97 |
++----------+--------+-------+----------+--------+----------+
 ```
 
 ---
 ### [./script/stress_test.sh](./script/stress_test.sh)
 
-Run stress test against the kxreport application (1000 requests)
+Run stress test against the kxreport application (1000 requests for 27 seconds)
