@@ -119,17 +119,6 @@ Font Configuration: Ensure THSarabun font are configured (Thai Language):
 - add THSarabun fonts in ./fonts/
 - OR add classpath to ./src/main/webapps/WEB-INF/lib/jasperreports-fonts.jar
 
-### deploy.sh
-
-if you want to modify kxreport sources and update war file
-
-```bash
-#!/bin/bash
-export MAVEN_OPTS="-Djava.awt.headless=true"
-mvn package
-sudo cp ./target/kxreport.war /var/lib/tomcat10/webapps
-```
-
 ## Docker Script
 
 Docker for evaluation or testing See ./script/docker/\*.sh.
