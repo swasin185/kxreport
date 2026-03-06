@@ -63,14 +63,14 @@ git clone https://github.com/swasin185/kxreport
 cd kxreport
 ```
 
-### ./script/install.sh
+### sudo ./script/install.sh
 
 Software requirement on Server
 
 ```bash
 #!/bin/bash
 apt install default-jdk-headless git maven mariadb-server tomcat10
-sudo mysql < ./sql/init-db.sql
+mysql < ./sql/init-db.sql
 ```
 
 ### [./script/build.sh](./script/build.sh)
