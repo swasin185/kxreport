@@ -1,0 +1,41 @@
+services:
+  mariadb:
+    image: mariadb:12-noble
+    container_name: mariadb
+    environment:
+      - MARIADB_DATABASE=kxtest
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=true
+    volumes:
+      - ./script/sql:/docker-entrypoint-initdb.d
+      - mariadb-data:/var/lib/mysql
+    restart: always
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  kxreport:
+    build: .
+    image: kxreport
+    container_name: kxreport
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      - KXREPORT_DB_URI=jdbc:mariadb://mariadb:3306/
+      - KXREPORT_DB_CONFIG=?user=kxreport&password=kxreport&minPoolSize=1&maxPoolSize=99&maxIdleTime=60
+      - KXREPORT_REPORT_PATH=/khgroup/report/
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    volumes:
+      # Optional: Mount the report folder for live updates of compiled reports
+      # - ./target/jasper:/khgroup/report
+      # Optional: Mount logs if you want to see them on the host
+      # - ./logs:/usr/local/tomcat/logs
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+
+volumes:
+  mariadb-data:

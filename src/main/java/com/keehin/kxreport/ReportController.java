@@ -151,7 +151,7 @@ public class ReportController {
 	private void createTempIdList(Connection conn, String idList) throws SQLException {
 		if (conn != null && idList != null) {
 			Statement stmt = conn.createStatement();
-			stmt.execute("drop report temporary table if exists idlist");
+			stmt.execute("drop temporary table if exists idlist");
 			stmt.execute("create temporary table idlist(id varchar(50))");
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO idlist VALUES (?)");
 			for (String item : idList.split(",")) {

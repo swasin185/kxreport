@@ -1,0 +1,17 @@
+# Ignore build artifacts and local dev files
+target/
+.git/
+.gitignore
+.prettierrc.json
+README.md
+docs/
+screenshot/
+script/docker/
+*.md
+
+# Keep what we need for the build:
+# pom.xml
+# src/
+# report/
+# fonts/
+# script/cert/ (needed in runtime stage)
