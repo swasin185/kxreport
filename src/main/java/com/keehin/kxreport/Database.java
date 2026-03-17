@@ -50,7 +50,7 @@ public class Database {
     public Connection getConnection(String db) throws SQLException {
         Connection conn = null;
         if (pools.get(db) == null) {
-            String dbURI = jdbcUri + db + dbConfig;
+            String dbURI = jdbcUri + db + (jdbcUri.contains("localhost") ? dbConfig : dbConfigSsl);
             logger.info("connect {}{}", jdbcUri, db);
             pools.put(db, new MariaDbPoolDataSource(dbURI));
         }
