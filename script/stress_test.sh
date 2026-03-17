@@ -9,7 +9,7 @@ URL="http://localhost:8080${API}"
 # URL="https://149.118.140.159:443${API}"
 # https = 230s
 # URL="http://149.118.140.159${API}"
-# URL="http://149.118.140.159${API}"
+# URL="https://149.118.140.159${API}"
 echo "URL: $URL"
 
 COUNT=1000
