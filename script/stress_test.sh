@@ -3,6 +3,10 @@
 # Configuration
 # URL updated as per your snippet
 URL="http://localhost:8080/kxreport/getPDF?report=A00&db=kxtest"
+URL="http://149.118.140.159:8080/kxreport/getPDF?report=A00&db=kxtest"
+# 150s
+# URL="https://149.118.140.159:8443/kxreport/getPDF?report=A00&db=kxtest"
+# https = 97s
 COUNT=1000
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MEM_SCRIPT="${SCRIPT_DIR}/mem.sh"

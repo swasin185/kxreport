@@ -3,14 +3,13 @@
     <Service name="Catalina">
         <Executor name="threadPool" 
             namePrefix="kx-exec-"
-            maxThreads="50" 
-            minSpareThreads="5"
-            maxQueueSize="100"/>
+            maxThreads="100" 
+            minSpareThreads="10"
+            maxQueueSize="500"/>
 
-        <!-- Connector port="8080" address="127.0.0.1" -->
-        <Connector port="8080"
-            redirectPort="8443" 
-            executor="threadPool" />
+        <Connector port="8080" executor="threadPool">
+            <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
+        </Connector>
         
         <Connector port="8443" 
             protocol="org.apache.coyote.http11.Http11NioProtocol"
