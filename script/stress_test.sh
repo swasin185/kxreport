@@ -3,12 +3,15 @@
 # Configuration
 # URL updated as per your snippet
 API="/kxreport/getPDF?report=A00&db=kxtest"
+
 URL="http://localhost:8080${API}"
-echo "URL: $URL"
 # URL="http://149.118.140.159:8080${API}"
 # http = 158s
-# URL="https://149.118.140.159:8443${API}"
-# https = 97s
+# URL="https://149.118.140.159:443${API}"
+# https = 230s
+URL="http://149.118.140.159${API}"
+echo "URL: $URL"
+
 COUNT=1000
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MEM_SCRIPT="${SCRIPT_DIR}/mem.sh"
@@ -37,7 +40,7 @@ TEST_START_TIME=$(date +%s)
 for i in $(seq 1 $COUNT); do
     # Execute request
     # -s: silent, -o /dev/null: discard PDF
-    curl -s -o /dev/null "$URL"
+    curl -s -k  -o /dev/null "$URL"
     
     echo -n "#"
     if [ $((i % 80)) -eq 0 ]; then
