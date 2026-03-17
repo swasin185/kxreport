@@ -2,14 +2,14 @@
 
 # Configuration
 # URL updated as per your snippet
-API="/kxreport/getPDF?report=A00&db=kxtest"
-
+API="/kxreport/getPDF?report=A00&db=kxtest&option=0"
 URL="http://localhost:8080${API}"
 # URL="http://149.118.140.159:8080${API}"
 # http = 158s
 # URL="https://149.118.140.159:443${API}"
 # https = 230s
-URL="http://149.118.140.159${API}"
+# URL="http://149.118.140.159${API}"
+# URL="http://149.118.140.159${API}"
 echo "URL: $URL"
 
 COUNT=1000

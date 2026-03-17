@@ -91,7 +91,7 @@ public class Parameter {
     }
 
     public void setOption(String option) {
-        this.option = blankToNull(option);
+        this.option = option;
     }
 
     public String getIdList() {
