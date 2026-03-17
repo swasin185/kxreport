@@ -5,7 +5,7 @@
             namePrefix="kx-exec-"
             maxThreads="100" 
             minSpareThreads="10"
-            maxQueueSize="500"/>
+            maxQueueSize="500" />
 
         <Connector port="8080" executor="threadPool">
             <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />

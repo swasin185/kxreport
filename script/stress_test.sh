@@ -2,10 +2,12 @@
 
 # Configuration
 # URL updated as per your snippet
-URL="http://localhost:8080/kxreport/getPDF?report=A00&db=kxtest"
-URL="http://149.118.140.159:8080/kxreport/getPDF?report=A00&db=kxtest"
-# 150s
-# URL="https://149.118.140.159:8443/kxreport/getPDF?report=A00&db=kxtest"
+API="/kxreport/getPDF?report=A00&db=kxtest"
+URL="http://localhost:8080${API}"
+echo "URL: $URL"
+# URL="http://149.118.140.159:8080${API}"
+# http = 158s
+# URL="https://149.118.140.159:8443${API}"
 # https = 97s
 COUNT=1000
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
