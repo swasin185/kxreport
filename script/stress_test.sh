@@ -2,12 +2,13 @@
 
 # Configuration
 # URL updated as per your snippet
+HOST=149.118.140.159
 API="/kxreport/getPDF?report=A00&db=kxtest&option=0"
-URL="http://localhost:8080${API}"                   # 22s
-# URL="http://149.118.140.159:8080${API}"           # 152s
-# URL="https://149.118.140.159:8443${API}"          # 210s
-# URL="http://149.118.140.159${API}"                # 290s
-# URL="https://149.118.140.159${API}"               # 210s
+URL="http://localhost:8080${API}"           # 22s
+# URL="http://${HOST}:8080${API}"           # 152s
+# URL="https://${HOST}:8443${API}"          # 210s
+# URL="http://${HOST}${API}"                # 290s
+# URL="https://${HOST}${API}"               # 210s
 
 COUNT=1000
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

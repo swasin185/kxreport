@@ -206,6 +206,7 @@ kxreport.db.config.ssl = ${kxreport.db.config}&useSSL=true&requireSSL=false
 - OR put the modified application.properties in /var/lib/tomcat10/
 
 ---
+
 ### [./script/mem.sh](./script/mem.sh)
 
 Show memory usage of tomcat and database process/connection
@@ -232,6 +233,14 @@ JAVA	USER	RAM_MB	SURV	NURS	LONG	JVM	GC	CLEAN
 ```
 
 ---
+
 ### [./script/stress_test.sh](./script/stress_test.sh)
 
 Run stress test against the kxreport application (1000 requests for 27 seconds)
+
+---
+
+### production server should build without some html files
+
+- ./src/main/resources/static/index.html
+- ./src/main/resources/static/list.html
