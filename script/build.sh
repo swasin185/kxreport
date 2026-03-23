@@ -21,6 +21,7 @@ sudo rsync -aL \
   --include='*/' \
   --include='*.jasper' \
   --exclude='*' \
+  --chown=tomcat:tomcat \
   ${JASPER_SRC_DIR}/ ${REPORT_DIR}
 
 echo "Stop ${TOMCAT} service..."
@@ -29,9 +30,11 @@ sudo systemctl stop ${TOMCAT}
 echo "Updating Tomcat libraries in: ${TOMCAT_LIB_DIR}"
 sudo rm -rf ${TOMCAT_LIB_DIR}/*.jar
 sudo cp -ur ${KXREPORT_LIB_SRC_DIR}/*.jar ${TOMCAT_LIB_DIR}
+sudo chown tomcat:tomcat ${TOMCAT_LIB_DIR}/*.jar
 
 echo "Deploying WAR file to: ${TOMCAT_WEBAPPS_DIR}"
 sudo cp ${WAR_SRC_PATH} ${TOMCAT_WEBAPPS_DIR}
+sudo chown tomcat:tomcat ${TOMCAT_WEBAPPS_DIR}/kxreport.war
 
 sudo systemctl start ${TOMCAT}
 sudo systemctl restart mysql
